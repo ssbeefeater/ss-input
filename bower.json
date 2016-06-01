@@ -4,8 +4,8 @@
   "description": "Ss-input(Server side input) is an ajax, customizable, full feature and powerful file - database manager for the web. The most awesome thing about ss-input, is that is free and open source.",
   "version": "1.0.0",
   "main": [
-    "dist/ssi-uploader/js/ssi-uploader.js",
-    "dist/ssi-uploader/styles/ssi-uploader.css"
+    "dist/ss-input/js/ss-input.min.js",
+    "dist/ss-input/styles/ss-input.min.css"
   ],
   "dependencies": {
     "jquery":">1.9.x",

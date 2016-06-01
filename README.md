@@ -1,6 +1,6 @@
 # ssi-modal
 
-An awesome jquery uploader.
+Ss-input(Server side input) is an ajax, customizable, full feature and powerful file/database manager for the web.
 
 #### Documentation and examples:
 
