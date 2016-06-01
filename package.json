@@ -1,0 +1,28 @@
+{
+  "name": "ss-input",
+  "version": "1.0.0",
+  "main": "dist/ss-input/js/ss-input.js",
+  "description": "A server side input",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.11.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-clean-css": "^2.0.7",
+    "gulp-concat": "^2.6.0",
+    "gulp-csso": "^2.0.0",
+    "gulp-if": "^2.0.0",
+    "gulp-inject": "^4.0.0",
+    "gulp-remove-code": "^1.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "node-sass": "^3.4.2",
+    "sprity": "^1.0.8",
+    "sprity-sass": "^1.0.4"
+  }
+}

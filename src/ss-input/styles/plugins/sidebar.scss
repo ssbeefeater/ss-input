@@ -1,0 +1,188 @@
+.ssi-mainModal {
+  #ghostbar {
+    width: 1px;
+    background-color: #979797;
+    opacity: 0.5;
+    position: absolute;
+    cursor: col-resize;
+    z-index: 999;
+  }
+  #dragbar {
+    background-color: #979797;
+    height: 30px;
+    position: relative;
+    top: 48%;
+    float: left;
+    z-index: 1;
+    transform: translate(-100%);
+    width: 5px;
+    cursor: col-resize;
+  }
+  #ssi-sidebar {
+    height: 100%;
+    border-left: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+    overflow: auto;
+    padding: 0 0;
+    float: left;
+    width: 13%;
+    font: 17px arial;
+    position: relative;
+    transition: width 0.4s;
+    z-index: 1;
+    &.ssi-verticalSlide {
+      overflow: hidden;
+      width: 0 !important;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+      &:hover {
+        text-decoration: none;
+        color: black;
+      }
+      &:active {
+        text-decoration: none;
+        color: black;
+      }
+    }
+    /*-----------------------dropDown--------------------------------------*/
+
+    &.ssi-dropDownMode {
+      overflow: visible;
+      &.ssi-verticalSlide {
+        a.ssi-listAnchor {
+          padding: 0 !important;
+        }
+      }
+      #ssi-sidebarContent {
+        &.ssi-dropDownWrapper {
+
+          li {
+            padding: 0;
+            border-bottom: 1px solid #f4f4f4;
+            &:hover, &:hover a {
+              color: white;
+              background-color: #377fb6;
+              font-size: 19px;
+            }
+          }
+          a.ssi-listAnchor {
+            white-space: nowrap;
+            margin-top: 4px;
+            padding: 0 5px;
+            display: inline-block;
+            font-size: 17px;
+            width: 100%;
+            overflow: hidden;
+
+          }
+          ul:first-child {
+            border: none;
+            display: block;
+            width: 100%;
+            top: 0;
+          }
+        }
+      }
+    }
+
+    /*-----------------------/dropDown--------------------------------------*/
+    /*-----------------------accordion--------------------------------------*/
+    #ssi-sidebarContent {
+      &.ssi-accordion ul:first-child {
+        list-style: none;
+        padding: 0 0 0 0;
+        width: 170px;
+        ul {
+          list-style: none;
+          padding: 0 0 0 0;
+          display: none;
+        }
+        ul li {
+          font-weight: normal;
+          cursor: auto;
+          background-color: #fff;
+          padding: 0 0 0 7px;
+        }
+        a {
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+
+      /*-----------------------accordion--------------------------------------*/
+
+      /*-----------------------ssi-treeView--------------------------------------*/
+
+      &.ssi-treeView {
+        &.ssi-fileSystem {
+          ul {
+            a.ssi-listAnchor {
+            margin-left: 2px;
+              &:before {
+                @extend .icon;
+                @include sprite($images-sidebar-Folder-15);
+                content: "";
+
+              }
+              &.ssi-treeViewRCurrent:before {
+                @extend .icon;
+                @include sprite($images-sidebar-Open-Folder-15);
+                content: "";
+              }
+            }
+          }
+        }
+        padding: 0 4px;
+        ul {
+          white-space: nowrap;
+          padding: 5px 0 0 0;
+          list-style: none;
+          margin: 0;
+          li.parent > a:first-child {
+            padding: 0 2px 0 0;
+          }
+
+          li.parent > a:first-child {
+            @extend .icon;
+            @include sprite($images-sidebar-Collapse-Arrow-15);
+            content: "";
+          }
+          li.parent.active > a:first-child {
+            @extend .icon;
+            @include sprite($images-sidebar-Collapse-down15);
+            content: "";
+          }
+          li {
+            padding: 0 0;
+            margin: 0 0;
+          }
+
+        }
+        ul li ul {
+          padding: 2px 2px 2px 20px;
+          display: none;
+        }
+        a.ssi-treeFolder:hover {
+          background: rgba(52, 132, 193, 0.05);
+        }
+        a.ssi-treeViewCurrent {
+          background: rgba(52, 132, 193, 0.05);
+        }
+
+        a.ssi-treeViewRCurrent {
+          background: rgba(52, 132, 193, 0.05);
+        }
+
+      }
+      /*-----------------------ssi-treeView end--------------------------------------*/
+
+    }
+
+  }
+
+}

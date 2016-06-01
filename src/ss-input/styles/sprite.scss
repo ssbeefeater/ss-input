@@ -1,0 +1,95 @@
+$images-menu-Down-10: -0px -0px 10px 10px;
+$images-menu-Upload-11: -0px -10px 11px 11px;
+$images-menu-Search-11: -0px -21px 11px 11px;
+$images-menu-Broom-Filled-11: -0px -32px 11px 11px;
+$images-menu-Checkmark-11: -0px -43px 11px 11px;
+$images-menu-Question-Mark-Filled-15: -0px -54px 8px 12px;
+$images-pathbar-Menu-14: -0px -66px 15px 13px;
+$images-menu-Question-Mark-Filled-152: -0px -79px 9px 13px;
+$images-list-Small-Icons-Filled-14: -0px -92px 14px 14px;
+$images-list-Checked-Checkbox-2-14: -0px -106px 14px 14px;
+$images-list-CodePen-14: -0px -120px 14px 14px;
+$images-list-Copy-14: -0px -134px 14px 14px;
+$images-list-Cut-Filled-14: -0px -148px 14px 14px;
+$images-list-date-14: -0px -162px 14px 14px;
+$images-list-Delete-14: -0px -176px 14px 14px;
+$images-list-Descending-Sorting-14: -0px -190px 14px 14px;
+$images-list-DetailsPreview14: -0px -204px 14px 14px;
+$images-list-Edit-14: -0px -218px 14px 14px;
+$images-list-Edit-File-14: -0px -232px 14px 14px;
+$images-list-editData: -0px -246px 14px 14px;
+$images-list-editWith-14: -0px -260px 14px 14px;
+$images-list-File-14: -0px -274px 14px 14px;
+$images-list-Fire-Element-Filled-14: -0px -288px 14px 14px;
+$images-list-Folder-14: -0px -302px 14px 14px;
+$images-list-Full--Image-14: -0px -316px 14px 14px;
+$images-list-Globe-14: -0px -330px 14px 14px;
+$images-list-iconsPreview-14: -0px -344px 14px 14px;
+$images-list-Image-File-14: -0px -358px 14px 14px;
+$images-list-Info-14: -0px -372px 14px 14px;
+$images-list-openWith-14: -0px -386px 14px 14px;
+$images-list-Original-Size-14: -0px -400px 14px 14px;
+$images-list-Paste-Filled-14: -0px -414px 14px 14px;
+$images-list-Save-18: -0px -428px 14px 14px;
+$images-pathbar-Left-14: -0px -442px 14px 14px;
+$images-pathbar-Up-14: -0px -456px 14px 14px;
+$images-item-Visible-20: -0px -470px 20px 14px;
+$images-list-aceEditor: -0px -484px 14px 14px;
+$images-pathbar-Right-14: -0px -498px 14px 14px;
+$images-item-Checked-Checkbox-2-15: -0px -512px 15px 14px;
+$images-list-Alphabetical-Sorting-14: -0px -526px 14px 14px;
+$images-list-Broom-Filled-14: -0px -540px 14px 14px;
+$images-pathbar-Home-Filled-15: -0px -554px 15px 15px;
+$images-sidebar-Open-Folder-15: -0px -569px 15px 15px;
+$images-sidebar-Folder-15: -0px -584px 15px 15px;
+$images-sidebar-Collapse-down15: -0px -599px 15px 15px;
+$images-sidebar-Collapse-Arrow-15: -0px -614px 15px 15px;
+$images-item-Multiply-15: -0px -629px 15px 15px;
+$images-pathbar-Sort-17: -0px -644px 17px 17px;
+$images-list-Add-Database-18: -0px -661px 18px 18px;
+$images-menu-Upload-18: -0px -679px 18px 18px;
+$images-menu-Refresh-18: -0px -697px 18px 18px;
+$images-menu-Add-Link-18: -0px -715px 18px 18px;
+$images-menu-Search-Filled-18: -0px -733px 18px 18px;
+$images-menu-Folder-18: -0px -751px 18px 18px;
+$images-menu-Settings-3-Filled-18: -0px -769px 18px 18px;
+$images-list-Add-File-Filled-18: -0px -787px 18px 18px;
+$images-menu-Add-Folder-18: -0px -805px 18px 18px;
+$images-menu-Tasks-Filled-18: -0px -823px 18px 18px;
+$images-menu-Question-Mark-20: -0px -841px 18px 18px;
+$images-pathbar-Hashtag-Filled-20: -0px -859px 20px 20px;
+$images-pathbar-Hashtag-Filled-23: -0px -879px 23px 23px;
+$images-pathbar-Hashtag-25: -0px -902px 25px 25px;
+$images-item-Checkmark-30: -0px -927px 30px 30px;
+$images-system-folder: -0px -957px 117px 80px;
+$images-system-placeholder: -0px -1037px 120px 95px;
+$images-system-empty: -0px -1132px 96px 96px;
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 3);
+}
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 4);
+}
+@function sprite-width($sprite) {
+   @return nth($sprite, 3);
+}
+@function sprite-height($sprite) {
+   @return nth($sprite, 4);
+}
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 1);
+  $sprite-offset-y: nth($sprite, 2);
+  background-position: $sprite-offset-x $sprite-offset-y;
+}
+@mixin sprite($sprite, $display: block) {
+   @include sprite-position($sprite);
+  background-repeat: no-repeat;
+  overflow: hidden;
+  display: $display;
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+.icon {
+  background-image: url('images/sprite.png');
+}

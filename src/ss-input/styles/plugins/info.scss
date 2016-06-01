@@ -1,0 +1,37 @@
+
+.ssi-infoModal {
+  .ssi-infoCompare {
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 0 2px;
+    display: inline-block;
+    .ssi-longText {
+      height: 150px;
+      white-space: normal;
+    }
+    td, th {
+      max-width: 180px;
+      border: 1px #b7b7b7 solid;
+      overflow-x: auto;
+      padding: 10px;
+      white-space: nowrap;
+    }
+    .ssi-itemWrapper {
+      margin: 0 auto;
+      td, th {
+        padding: 0;
+        border: none;
+      }
+      .ssi-optionsDiv {
+        display: block;
+      }
+      .ssi-itemName {
+        border: 1px solid red;
+        display: none;
+      }
+    }
+    .ssi-infobtn {
+      margin-right: 7px;
+    }
+  }
+}

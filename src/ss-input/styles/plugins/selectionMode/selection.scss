@@ -1,0 +1,50 @@
+
+.ssi-pickItem {
+  margin: 4px 3px;
+  display: inline-block;
+  padding: 0;
+  .ssi-itemName {
+    min-height: 14px;
+    width: 105px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ssi-selectionPreview {
+    position: relative;
+    width: 120px;
+  }
+
+  &.ssi-vertical {
+    display: table-row;
+    .ssi-selectionPreview {
+      border:1px solid #ededed;
+      position: relative;
+      height: 60px;
+      width: 80px;
+      background-size: cover;
+    }
+    .ssi-itemName{
+      margin-top: 3px;
+    }
+  }
+
+
+
+  .ssi-dataUrlName {
+    width: 120px;
+  }
+  .ssi-singleImg {
+    width: 120px;
+    height: 95px;
+  }
+  .ssi-pick {
+    background-size: cover;
+    background-image: url("images/system/placeholder.png");
+    border: 3px solid #0b69a3;
+    cursor: pointer;
+    width: 120px;
+    height: 95px;
+    overflow: hidden;
+  }
+}

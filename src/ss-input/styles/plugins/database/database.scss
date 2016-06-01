@@ -1,0 +1,58 @@
+.ssi-mainModal{
+  #ssi-collectionTitle{
+    float: left;
+    font-size: 18px;
+    margin:0 5px;
+  }
+}
+.ssi-formWindow {
+  #ssi-formData {
+    display: table;
+    margin: 0 auto;
+    option,select{
+      text-transform: capitalize;
+    }
+    textarea{
+      width:400px;
+      height: 150px;
+    }
+  }
+  .ssi-modalContent {
+    overflow: visible;
+  }
+  table {
+    min-width: 400px;
+    border-collapse: collapse;
+    td, th {
+      max-width: 100%;
+      border: 1px #e7e7e7 solid;
+      overflow-x: auto;
+      padding: 10px;
+      white-space: nowrap;
+    }
+  }
+  .ssi-topButtonsWrapper {
+    width: 100%;
+    margin-bottom: 10px;
+    @extend .clearfix;
+    .ssi-topButtons {
+      float: right;
+      .ssi-mBtn {
+        padding:6px 8px;
+      }
+    }
+
+  }
+  .ssi-requiredError {
+    border: 1px solid #b93127;
+    box-shadow: 0 0 5px 1px rgba(255, 77, 49, 0.75);
+    &:focus {
+      outline-color: #dc3a2d;
+    }
+  }
+
+  label.ssi-required:before {
+    content: '*';
+    color: #e24638;
+  }
+}

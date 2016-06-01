@@ -1,0 +1,75 @@
+.ssi-mainModal {
+  .ssi-multiTable {
+    max-width: 70%;
+    tr {
+      vertical-align: middle;
+    }
+    .ssi-itemName {
+      width: 80px;
+      .ssi-dataUrlName {
+        width: 80px;
+      }
+    }
+  }
+  .ssi-icons {
+    .ssi-itemWrapper {
+      .ssi-checked {
+        border: 4px solid #0b69a3;
+        &.ssi-mActive {
+          border: 8px solid #6060bf !important;
+        }
+      }
+    }
+  }
+  #ssi-itemsWrapper {
+    &.ssi-details {
+      .ssi-itemWrapper {
+        .ssi-checked {
+          border: none;
+          border-left: 8px solid #22af00;
+          &.ssi-mActive {
+            border-left: 8px solid #6060bf !important;
+          }
+        }
+        width: auto !important;
+        display: table-row-group;
+      }
+    }
+
+  }
+  .ssi-multiPickMode .ssi-btnContainer {
+    @include mediumToSmallMedia {
+      position: absolute;
+      top: 33px;
+      z-index: 1;
+      display: none;
+    }
+
+  }
+  #ssi-displayFilesWrapper {
+    float: right;
+    margin-top: 20px;
+    @include smallMedia {
+      display: none;
+    }
+    .ssi-displayFiles {
+      background-color: white;
+      padding: 0 5px;
+      margin-left: 2px;
+      text-align: center;
+      height: 20px;
+      border: 1px solid #cccccc;
+      float: left;
+      vertical-align: middle;
+      line-height: 20px;
+
+    }
+    .ssi-clearBtn {
+      font-size: 11px;
+      padding: 4px 4px;
+      margin: 0 1px 0 8px;
+    }
+
+  }
+
+}

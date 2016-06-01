@@ -1,0 +1,22 @@
+.ssi-mainModal {
+  a.ssi-path {
+    text-decoration: none;
+    font-size: 18px;
+    padding: 2px;
+    float: left;
+    color: black;
+    &:hover {
+      text-decoration: none;
+      /*background: #337ab7;*/
+      background: rgba(51, 122, 183, 0.3);
+    }
+    &:active {
+      text-decoration: none;
+      background: rgba(51, 122, 183, 0.5);
+
+    }
+  }
+  .ssi-pathItemWrapper {
+    float: left;
+  }
+}

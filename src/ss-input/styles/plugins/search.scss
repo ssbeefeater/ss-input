@@ -1,0 +1,29 @@
+.ssi-mainModal{
+
+.ssi-btnContainer{
+  .ssi-moreInputs {
+    margin-left: 0;
+    padding: 7.5px 0;
+    border-radius: 0;
+  }
+}
+  .ssi-extraWrapper {
+    position: absolute;
+    left: 0;
+    z-index: 111;
+    top: 35px;
+    overflow: hidden;
+    max-height: 0;
+    width: 100px;
+    transition: max-height 0.3s;
+    background-color: white;
+    .ssi-extraInput {
+      margin-top: 2px;
+    }
+    &.ssi-slide {
+      max-height: 500px;
+      transition: max-height 1s;
+    }
+  }
+
+}

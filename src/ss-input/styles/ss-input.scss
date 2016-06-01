@@ -1,0 +1,325 @@
+/* inject:scss */
+@import "mixins.scss";
+@import "icons.scss";
+@import "sprite.scss";
+@import "core/button.scss";
+@import "plugins/contextMenu.scss";
+@import "plugins/history.scss";
+@import "plugins/iconSize.scss";
+@import "plugins/info.scss";
+@import "plugins/path.scss";
+@import "plugins/search.scss";
+@import "plugins/select.scss";
+@import "plugins/sidebar.scss";
+@import "plugins/sort.scss";
+@import "plugins/templateManager.scss";
+@import "plugins/database/database.scss";
+@import "plugins/fileSystem/aceEditor.scss";
+@import "plugins/fileSystem/copy.scss";
+@import "plugins/fileSystem/fileSystem.scss";
+@import "plugins/fileSystem/rename.scss";
+@import "plugins/fileSystem/textEditor.scss";
+@import "plugins/selectionMode/multipleSelection.scss";
+@import "plugins/selectionMode/selection.scss";
+@import "plugins/selectionMode/singleSelection.scss";
+/* endinject */
+
+* {
+  box-sizing: border-box;
+}
+
+.ssi-longText {
+  height: 80px;
+  white-space: normal;
+  overflow: auto;
+}
+
+#ssi-actions ,.ssi-actions {
+  position: absolute;
+  overflow: hidden;
+  right: 0;
+  z-index: 1;
+  margin: 1px 0;
+  padding: 2px 4px;
+  display: none;
+  a .icon {
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
+
+//later
+
+//scrollbar
+.ssi-mainModal, .ssi-infoModal {
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  ::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #337ab7;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3467c5;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: #4165e0;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #d2d2d2;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-track:hover {
+    background: #c3c3c3;
+  }
+
+  &::-webkit-scrollbar-track:active {
+    background: #d6d6d6;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+//change class later
+
+//scrollbar end
+.ssi-mainModal {
+  @extend .clearfix;
+  .ssi-bottomButtons {
+    position: relative;
+    width: 100%;
+    border: 1px solid #d8d8d8;
+    border-bottom: none;
+    float: left;
+    .ssi-leftButtons {
+      float: left;
+    }
+    .ssi-rightButtons {
+      float: right;
+    }
+  }
+  .ssi-modalContent {
+    overflow: visible;
+  }
+  a {
+    line-height: 1.1;
+  }
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+  }
+  .ssi-keyShort {
+    font: 9px "Comic Sans MS", cursive, sans-serif;
+    word-spacing: -1.5px;
+    padding: 1.5px;
+    border: 0.1px solid #e7e7ee;
+    box-shadow: #272822;
+
+  }
+  //main
+  .ssi-items {
+    border-left: 1px solid #d8d8d8;
+    height: 100%;
+    width: auto;
+    position: relative;
+  }
+  //main
+  #ssi-contentFiles {
+    overflow-y: auto;
+    height: 100%;
+  }
+  //main
+  .ssi-mainContent {
+    border-right: 1px solid #d8d8d8;
+    width: 100%;
+    float: left;
+  }
+  //main
+  #ssi-content {
+    position: relative;
+    width: 100%;
+    outline: transparent;
+    border-bottom: 1px solid #d8d8d8;
+    @extend .clearfix;
+
+  }
+  //main
+  .ssi-topBarWrapper {
+    position: relative;
+    width: 100%;
+    height: 25px;
+    border: 1px solid #d8d8d8;
+    float: left;
+    overflow: hidden;
+    .ssi-topBar {
+      overflow: hidden;
+      width: auto;
+      position: relative;
+      height: 28px;
+      .ssi-progress {
+        position: absolute;
+        display: block;
+        text-align: center;
+        width: 0;
+        height: 25px;
+        background: green;
+        opacity: .2;
+        transition: width .3s;
+        &.hide {
+          opacity: 0;
+          transition: opacity 1.3s;
+        }
+      }
+
+    }
+    //main
+    .ssi-topBarButtonArea {
+      border-right: 1px solid #d8d8d8;
+      font-size: 12px;
+      width: auto;
+      float: left;
+      padding: 0 5px;
+      height: 23px;
+      vertical-align: middle;
+      .icon {
+        margin: 3px 2px
+      }
+      a {
+
+        &.disabled {
+          opacity: 0.4;
+        }
+        line-height: 23px;
+        margin: 0 2px;
+        display: inline-block;
+        &:hover {
+          text-decoration: none;
+          color: black;
+        }
+      }
+    }
+  }
+  //main
+  .ssi-dropDownWrapper {
+    .ssi-show {
+      display: block !important;
+    }
+    ul {
+      margin: 0;
+      display: none;
+      padding: 3px 0 3px 2px;
+      background: #fff;
+      &:hover {
+        display: block;
+      }
+      list-style: none;
+      border: 1px solid #878787;
+      position: absolute;
+      top: 40px;
+      z-index: 10;
+      width: auto;
+    }
+    float: left;
+li:first-child{
+  padding-top: 3px;
+
+}
+    a {
+      display: inline-block;
+      width: 100%;
+      padding:1px 2px;
+
+      overflow: hidden;
+      font-size: 12px;
+      text-decoration: none;
+      color: #323232;
+      &:hover {
+        color: #C01818;
+      }
+      &:active {
+        color: #878787;
+      }
+      &.disabled {
+        pointer-events: none;
+      }
+    }
+    .parent {
+      position: relative;
+      ul {
+        width: 120px;
+        margin-top: 0;
+        left: 100%;
+        top: 0;
+      }
+    }
+    .ssi-dropDown {
+      float: left;
+      &:hover {
+        + ul {
+          display: block;
+        }
+      }
+    }
+
+  }
+  //-DropDown
+  .ssi-hidden {
+    display: none !important;
+  }
+
+}
+
+.ssi-tooltipText {
+  &.ssi-fade {
+    transition: opacity .8s;
+  }
+  &.ssi-fadeOut {
+    opacity: 0;
+  }
+  &.ssi-fadeIn {
+    opacity: 1;
+  }
+  border: 1px #b7b7b7 solid;
+  border-radius: 6px;
+  padding: 7px;
+  color: #fff;
+  display: block;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #151515;
+  position: absolute;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 1;
+  z-index: 30000;
+
+}
+.ssi-confirmModal{
+  .ssi-modalContent{
+    font-size: 17px;
+  }
+}
+.ssi-radioGroup {
+  input {
+    margin-left: 5px;
+  }
+}

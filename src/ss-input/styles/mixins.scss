@@ -1,0 +1,44 @@
+
+@mixin tinyMedia {
+  @media only screen and (max-width: 450px) {
+    .ssi-modalTitle {
+      font-size: 18px;
+    }
+    @content;
+  }
+}
+
+@mixin smallMedia {
+  @media only screen and (max-width: 500px) {
+    .ssi-modalTitle {
+      font-size: 18px;
+    }
+    @content;
+  }
+}
+
+@mixin mediumMedia {
+  @media only screen and (max-width: 600px) {
+    @content;
+  }
+}
+
+@mixin mediumToSmallMedia {
+  @media only screen and (max-width: 800px) {
+    @content;
+  }
+}
+
+@mixin largeMedia {
+  @media only screen and (max-width: 900px) {
+    @content;
+
+  }
+}
+.clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

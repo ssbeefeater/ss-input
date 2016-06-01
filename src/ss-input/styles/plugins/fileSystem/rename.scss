@@ -1,0 +1,24 @@
+.ssi-mainModal {
+  .ssi-itemWrapper {
+    #ssi-editField {
+      width: 100%;
+      @extend .clearfix;
+      #ssi-renameInput {
+        word-break: keep-all;
+        width: 100%;
+        margin-bottom: 4px;
+      }
+      #ssi-renameConfirm, #ssi-renameCancel {
+        font-size: 10px;
+        padding: 4px 4px;
+        margin:0 2px 0 0
+      }
+    }
+  }
+  .ssi-details{
+      #ssi-editField {
+        margin-top: 10px;
+      }
+  }
+}
+

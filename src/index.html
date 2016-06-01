@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.4/contents.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.4/contents.css"/>
+    <link rel="stylesheet" href="bower_components/ssi-modal/dist/ssi-modal/styles/ssi-modal.css">
+    <link rel="stylesheet" href="bower_components/ssi-uploader/dist/ssi-uploader/styles/ssi-uploader.css">
+    <link rel="stylesheet" href="styles/ss-input.min.css">
+
+</head>
+
+<body>
+<!--
+-------------------------------------------
+-------------------single------------------
+-------------------------------------------
+-->
+<h3>single</h3>
+<div class="ssi-single"></div>
+<div class="ssi-single2"></div>
+<div class="ssi-single3"></div>
+
+<br><br>
+<!--
+-------------------------------------------
+-------------------multiple----------------
+-------------------------------------------
+-->
+<h3>multiple</h3>
+<button class="ssi-multiBtn">Open</button>
+<div class="ssi-multi"></div>
+
+<button class="ssi-multi2Btn">Open</button>
+<div class="ssi-multi2"></div>
+
+<button class="ssi-multi3Btn">Open</button>
+<div class="ssi-multi3"></div>
+
+<br><br>
+
+<!--
+-------------------------------------------
+-------------------textEditor--------------
+-------------------------------------------
+-->
+<h3>textEditor</h3>
+<button class="ssi-textEditor">Open</button>
+<button class="ssi-textEditor2">Open</button>
+<textarea style="float: left" id="editor1"></textarea>
+<textarea style="float: left" id="editor2"></textarea>
+<br><br>
+
+<!--
+-------------------------------------------
+-------------------manager-----------------
+-------------------------------------------
+-->
+<h3>manager</h3>
+<button class="ssi-managerBtn">Open</button>
+<div style="height:600px;width:600px" class="ssi-manager"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.10/tinymce.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.4/ckeditor.js"></script>
+
+<script src="bower_components/ssi-modal/dist/ssi-modal/js/ssi-modal.js"></script>
+<script src="bower_components/ssi-uploader/dist/ssi-uploader/js/ssi-uploader.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ext-modelist.js"></script>
+
+<!-- inject:js -->
+<script src="ss-input/js/core/Ss-input.js"></script>
+<script src="ss-input/js/core/Button.js"></script>
+<script src="ss-input/js/core/Handler.js"></script>
+<script src="ss-input/js/core/Input.js"></script>
+<script src="ss-input/js/core/locale.js"></script>
+<script src="ss-input/js/core/Plugin.js"></script>
+<script src="ss-input/js/core/templates.js"></script>
+<script src="ss-input/js/core/tools.js"></script>
+<script src="ss-input/js/plugins/selectionMode/selectionMode.js"></script>
+<script src="ss-input/js/plugins/selectionMode/multiSelection.js"></script>
+<script src="ss-input/js/plugins/selectionMode/singleSelection.js"></script>
+<script src="ss-input/js/plugins/selectionMode/textEditorSelection.js"></script>
+<script src="ss-input/js/plugins/fileSystem/fileSystem.js"></script>
+<script src="ss-input/js/plugins/fileSystem/history.js"></script>
+<script src="ss-input/js/plugins/fileSystem/path.js"></script>
+<script src="ss-input/js/plugins/database/database.js"></script>
+<script src="ss-input/js/plugins/search.js"></script>
+<script src="ss-input/js/plugins/fileSystem/mkdir.js"></script>
+<script src="ss-input/js/plugins/fileSystem/newFile.js"></script>
+<script src="ss-input/js/plugins/fileSystem/upload.js"></script>
+<script src="ss-input/js/plugins/fileSystem/url.js"></script>
+<script src="ss-input/js/plugins/database/newRecord.js"></script>
+<script src="ss-input/js/plugins/refresh.js"></script>
+<script src="ss-input/js/plugins/imgBox.js"></script>
+<script src="ss-input/js/plugins/scan.js"></script>
+<script src="ss-input/js/plugins/templateManager.js"></script>
+<script src="ss-input/js/plugins/iconSize.js"></script>
+<script src="ss-input/js/plugins/sort.js"></script>
+<script src="ss-input/js/plugins/info.js"></script>
+<script src="ss-input/js/plugins/fileSystem/copy.js"></script>
+<script src="ss-input/js/plugins/delete.js"></script>
+<script src="ss-input/js/plugins/fileSystem/textEditor.js"></script>
+<script src="ss-input/js/plugins/fileSystem/aceEditor.js"></script>
+<script src="ss-input/js/plugins/fileSystem/rename.js"></script>
+<script src="ss-input/js/plugins/database/editRecord.js"></script>
+<script src="ss-input/js/plugins/sidebar.js"></script>
+<script src="ss-input/js/plugins/selectAll.js"></script>
+<script src="ss-input/js/plugins/cache.js"></script>
+<script src="ss-input/js/plugins/infoBubble.js"></script>
+<script src="ss-input/js/plugins/nameBubble.js"></script>
+<script src="ss-input/js/plugins/contextMenu.js"></script>
+<script src="ss-input/js/plugins/select.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/deleteHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/imgBoxHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/infoBubbleHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/scanHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/searchHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/selectAllHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/selectionHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/sidebarHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/sortHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/uploadHandler.js"></script>
+<!-- endinject -->
+<script>
+    $(document).ready(function () {
+
+        //-------------------------------------------
+        //-------------------single------------------
+        //-------------------------------------------
+
+        $('.ssi-single').ss_input({
+            fileSystem: {
+                rootPath: '/ss-input/src/images',//the root folder where the plugin will look for images
+                scriptsPath: '/ss-input/src/ss-input/system/'
+            },
+            selection: {
+                pathType:'absolute',
+                defaultValue:'/ss-input/src/images/11038924_894506883920890_4916119695970577309_n.jpg',
+                modeOptions: {
+                    inputName: 'muInput'
+                }
+            }
+        });$('.ssi-single3').ss_input({
+            plugins: ['sidebar', 'select', 'search', 'contextMenu', 'sort'],
+            fileSystem: {
+                rootPath: '/ss-input/src/images',//the root folder where the plugin will look for images
+                scriptsPath: '/ss-input/src/ss-input/system/'
+            },
+            selection: {
+                pathType:'absolute',
+                defaultValue:'/ss-input/src/images/11038924_894506883920890_4916119695970577309_n.jpg',
+                modeOptions: {
+                    inputName: 'muInput'
+                }
+            }
+        });
+        $('.ssi-single2').ss_input({
+            storageType: 'database',
+            database: {
+                collections: {
+                    Users: {
+                        displayImage: 'condition:(field:(genre)=="male"?"images/userMale.png":"images/userFemale.png")',
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/users/:id?apiKey=LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj',
+                        schema: {
+                            "_id": {type: 'string', edit: false, id: true, search: true},
+                            "username": {type: 'string', required: true, search: true, displayName: true},
+                            "password": {type: 'string', inputType: 'password'},
+                            "genre": {type: 'enum', options: ['male', 'female'], displayImage: true, default: 'female'}
+                        }
+                    },
+                    Ant: {
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/landscapes?apiKey=LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj'
+                    }
+                }
+            },
+            selection: {
+                defaultValue:'2',
+                modeOptions: {
+                    inputName: 'muInput'
+                }
+            }
+        });
+
+        //-------------------------------------------
+        //-------------------multiple----------------
+        //-------------------------------------------
+
+        $('.ssi-multiBtn').ss_input({
+            defaultPreviewType: 'icons',
+            language: 'gr',
+            fileSystem: {
+                rootPath: '/ss-input/src/images',//the root folder where the plugin will look for images
+                scriptsPath: '/ss-input/src/ss-input/system/'
+            },
+            allowed: ['jpg', 'jpeg', 'png', 'txt', 'js'],//the files that are allowed for upload
+            selection: {
+                pathType:'absolute',
+                selectionMode: 'multiSelection',
+                inputName: 'profileimg',//the name of the input that image value will be stored
+                modeOptions: {
+                    content: '.ssi-multi', //the target where images and fields will appear after selection
+                    input: [//the input options
+                        {
+                            label: 'Title',
+                            type: 'select',
+                            options: [{label: 'aaa', value: 'select1'}, {
+                                label: 'ghgh',
+                                value: 'select2',
+                                selected: true
+                            }],
+                            className: '',
+                            name: 'title[]'
+                        }, {
+                            label: 'Title',
+                            type: 'select',
+                            multiple: true,
+                            options: [{label: 'bb', value: 'mselect1'}, {
+                                label: 'cc',
+                                value: 'mselect2',
+                                selected: true
+                            }],
+                            className: '',
+                            name: 'title[]'
+                        }, {
+                            label: 'Description',
+                            type: 'textarea',
+                            className: '',
+                            name: 'desc[]'
+                        }, {
+                            label: 'Title',
+                            type: 'radio',
+                            radio: [{value: '1a', label: 'Radio0'}, {
+                                label: 'Radio1',
+                                value: '2b',
+                                checked: true
+                            }],
+                            checked: true,
+                            className: '',
+                            name: 'title[]'
+                        },
+                        {label: 'Order', type: 'text', className: '', name: 'order[]', value: ''},
+                        {label: 'fff', checked: false, type: 'checkbox'}
+                    ],
+                    duplicate: false,
+                    maxItems: 9
+                },
+                defaultValue: [{
+                    value: '/ss-input/src/images/2.jpg',
+                    input: ['select1', ['mselect2'], 'dasdsadaf fdsf sd', '2b', '3', 0]
+                }, {
+                    value: '/ss-input/src/images/3.jpg',
+                    input: ['select2', ['mselect2', 'mselect1'], 'dasdsadaf fdsf sd', '1a', '33', 1]
+                }]
+            }
+        });
+
+        $('.ssi-multi2Btn').ss_input({
+            language: 'gr',
+            storageType: 'database',
+            database: {
+                collections: {
+                    Image: {
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/musicAlbums/:id?apiKey=LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj',
+                        schema: {
+                            "_id": {type: 'string', edit: false, id: true, search: true},
+                            "title": {type: 'string', required: true, search: true, displayName: true},
+                            "imagePath": {
+                                type: 'string', details: false, inputType: 'textarea', displayImage: true,
+                                default: 'http://www.designofsignage.com/application/symbol/building/image/600x600/no-photo.jpg'
+                            }
+                        }
+                    }
+                }
+            },
+            selection: {
+                selectionMode: 'multiSelection',
+                modeOptions: {
+                    duplicate: true,
+                    maxItems: 5,
+                    content: '.ssi-multi2'
+                }
+            }
+        });
+        $('.ssi-multi3Btn').ss_input({
+            language: 'gr',
+            storageType: 'database',
+            database: {
+                baseCollection: 'Landscapes',
+                collections: {
+                    "Music Albums": {
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/musicAlbums/:id?apiKey='/*[*/ + 'LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj'/*]*/
+                    },
+                    "Landscapes": {
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/landscapes/:id?apiKey='/*[*/ + 'LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj'/*]*/
+                    }
+                }
+
+            },
+            selection: {
+                selectionMode: 'multiSelection',
+                modeOptions: {
+                    content: '.ssi-multi3'
+                },
+                defaultValue: [{
+                    value: 'Landscapes:http://www.santorini-hotels.info/santorini-hotels/santorini-budget-hotels-apartments/Kavalari/Kavalari-1.jpg'
+                }, {
+                    value: 'Landscapes:http://10wallpaper.com/wallpaper/medium/1207/eiffel_tower_paris-France_landscape_wallpaper_medium.jpg'
+                }]
+            }
+        });
+
+        //-------------------------------------------
+        //-----------------textEditor----------------
+        //-------------------------------------------
+
+        $('.ssi-textEditor').ss_input({
+            language: 'gr',
+            fileSystem: {
+                rootPath: '/ss-input/src/images',//the root folder where the plugin will look for images
+                scriptsPath: '/ss-input/src/ss-input/system/'
+            },
+            selection: {
+                selectionMode: 'textEditorSelection',
+                modeOptions: {
+                    method: function (url) {
+                        CKEDITOR.instances['editor1'].insertHtml('<img style="max-width:150px;max-height:150px" src="' + url + '">');
+                    }
+                }
+            },
+            modalSize: 'medium'
+        });
+        $('.ssi-textEditor2').ss_input({
+            language: 'gr',
+            storageType: 'database',
+            mode: 'selection',
+            database: {
+                collections: {
+                    Music: {
+                        selectionField: 'imagePath',
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/musicAlbums?apiKey=LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj'
+                    }
+
+                }
+            },
+            selection: {
+                selectionMode: 'textEditorSelection',
+                modeOptions: {
+                    method: function (url) {
+                        tinyMCE.get("editor2").execCommand('mceInsertContent', false, '<img style="max-width:150px;max-height:150px" src="' + url + '">');
+                    }
+                }
+            }
+        });
+
+        //-------------------------------------------
+        //-------------------manager-----------------
+        //-------------------------------------------
+        $('.ssi-managerBtn').ss_input({
+            language: 'gr',
+            mode: 'manager',
+            storageType: 'database',
+            database: {
+                collections: {
+                    Landscapes: {
+                        selectionField: 'imagePath',
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/landscapes?apiKey=LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj'
+                    }
+                }
+            }
+        });
+
+        $('.ssi-manager').ss_input({
+            language: 'gr',
+            mode: 'manager',
+            storageType: 'database',
+            showTo: 'element',
+            fileSystem: {
+                rootPath: '/ss-input/src/images',//the root folder where the plugin will look for images
+                scriptsPath: '/ss-input/src/ss-input/system/'
+            },
+            database: {
+                collections: {
+                    Users: {
+                        displayImage: 'condition:(field:(genre)=="male"?"images/userMale.png":"images/userFemale.png")',
+                        baseUrl: 'https://api.mlab.com/api/1/databases/ss_input/collections/users/:id?apiKey=LcrxGmtwb0maQ7DWGmBPnXQWcKja2CIj',
+                        schema: {
+                            "_id": {type: 'string', edit: false, id: true, search: true},
+                            "username": {type: 'string', required: true, search: true, displayName: true},
+                            "password": {type: 'string', inputType: 'password'},
+                            "genre": {type: 'enum', options: ['male', 'female'], displayImage: true, default: 'female'}
+                        }
+                    }
+                }
+            }
+        });
+
+    });
+</script>
+</body>
+
+
+</html>

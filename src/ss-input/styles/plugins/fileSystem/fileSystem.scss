@@ -1,0 +1,12 @@
+.ssi-mainModal{
+  .directory .ssi-displayDiv {
+    background-size: cover;
+    background-color: inherit;
+    background-image: url("images/system/folder.png") !important;
+  }
+}
+.ssi-empty .ssi-displayDiv,.ssi-empty .ssi-selectionPreview {
+  background-size: cover;
+  background-color: inherit;
+  background-image: url("images/system/empty.png") !important;
+}

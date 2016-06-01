@@ -1,0 +1,37 @@
+
+{
+  "name": "ss-input",
+  "description": "Ss-input(Server side input) is an ajax, customizable, full feature and powerful file - database manager for the web. The most awesome thing about ss-input, is that is free and open source.",
+  "version": "1.0.0",
+  "main": [
+    "dist/ssi-uploader/js/ssi-uploader.js",
+    "dist/ssi-uploader/styles/ssi-uploader.css"
+  ],
+  "dependencies": {
+    "jquery":">1.9.x",
+    "ssi-modal":"latest"
+  },
+  "keywords": [
+    "file manager",
+    "jquery",
+    "server side input",
+    "spa",
+    "database manager",
+    "multiple selection"
+  ],
+  "authors": [
+    "ssbeefeater <ssbeefeater@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "/src",
+    "package.json",
+    "gulpfile.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssbeefeater/ss-input.git"
+  }
+}

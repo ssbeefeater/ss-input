@@ -1,0 +1,29 @@
+.ssi-mainModal {
+
+  #ssi-contextMenuUl {
+    margin: 0;
+    z-index: 10;
+    max-height: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    visibility:hidden;
+    overflow: hidden;
+    display: block;
+    li{
+      padding: 0;
+    }
+    &.ssi-appear {
+      max-height: 1500px;
+      transition: max-height 0.7s;
+      visibility: visible;
+    }
+    .ssi-noItems {
+      font-size: 10px;
+      color: #6d6d6d;
+      &:hover {
+        color: #6d6d6d;
+      }
+    }
+  }
+
+}

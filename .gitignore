@@ -1,0 +1,5 @@
+node_modules
+src/bower_components
+.idea
+remoteurlAction.php
+src/dataurl.js

@@ -1,0 +1,49 @@
+.ssi-mainModal {
+  #ssi-itemsWrapper {
+  &.ssi-icons {
+    .ssi-itemWrapper {
+      &.ssi-mImgS {
+        width: 80px;
+        .ssi-displayDiv {
+          width: 80px;
+          height: 70px;
+        }
+        .ssi-itemName {
+          width: 70px;
+        }
+      }
+      &.ssi-mImgL {
+        width: 130px;
+        .ssi-displayDiv {
+          width: 130px;
+          height: 120px;
+        }
+        .ssi-itemName {
+          width: 130px;
+        }
+      }
+    }
+  }
+  &.ssi-details {
+
+      .ssi-itemWrapper {
+        &.ssi-mImgS {
+          .ssi-displayDiv {
+            width: 50px;
+            height: 50px;
+          }
+        }
+        &.ssi-mImgL {
+          .ssi-displayDiv {
+            width: 100px;
+            height: 100px;
+          }
+
+        }
+      }
+    }
+
+  }
+
+}
+

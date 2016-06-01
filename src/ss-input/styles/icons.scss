@@ -1,0 +1,197 @@
+@import "sprite.scss";
+
+span.icon {
+  float: left;
+  margin: 0 5px 0 3px;
+}
+
+.ssi-loadingIcon {
+  background-image: url("images/system/loader.gif");
+  width: 20px;
+  height: 20px;
+  &.ssi-itemLoader {
+    position: relative;
+    margin: auto auto;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+  &.ssi-pathLoader {
+    margin: 1px 0 0 3px;
+    float: left;
+  }
+}
+.icon {
+  float: left;
+  &.ssi-searchIcon {
+    @include sprite($images-menu-Search-Filled-18);
+  }
+  &.ssi-aceEditorIcon {
+    @include sprite($images-list-aceEditor);
+  }
+  &.ssi-newFileIcon {
+    @include sprite($images-list-Add-File-Filled-18);
+  }
+  &.ssi-editFileIcon {
+    @include sprite($images-list-Edit-File-14);
+  }
+  &.ssi-editDocumentIcon {
+    @include sprite($images-list-editData);
+  }
+  &.ssi-saveIcon {
+    @include sprite($images-list-Save-18);
+  }
+  &.ssi-newDocumentIcon {
+    @include sprite($images-list-Add-Database-18);
+  }
+  &.ssi-deleteIcon {
+    @include sprite($images-list-Delete-14);
+  }
+  &.ssi-cacheIcon {
+    @include sprite($images-list-Broom-Filled-14);
+  }
+  &.ssi-urlIcon {
+    @include sprite($images-menu-Add-Link-18);
+  }
+  &.ssi-optionsIcon {
+    @include sprite($images-menu-Tasks-Filled-18);
+  }
+  &.ssi-mkdirIcon {
+    @include sprite($images-menu-Folder-18);
+  }
+  &.ssi-refreshIcon {
+    @include sprite($images-menu-Refresh-18);
+  }
+  &.ssi-uploadIcon {
+    @include sprite($images-menu-Upload-18);
+  }
+  &.ssi-checkIcon {
+    @include sprite($images-menu-Checkmark-11);
+  }
+  &.ssi-urlUpIcon {
+    @include sprite($images-menu-Upload-11);
+  }
+  &.ssi-searchMiniIcon {
+    @include sprite($images-menu-Search-11);
+  }
+  &.ssi-actionsIcon {
+    @include sprite($images-menu-Settings-3-Filled-18);
+  }
+  &.ssi-cutIcon {
+    @include sprite($images-list-Cut-Filled-14);
+  }
+  &.ssi-copyIcon {
+    @include sprite($images-list-Copy-14);
+  }
+  &.ssi-pasteIcon {
+    @include sprite($images-list-Paste-Filled-14);
+  }
+  &.ssi-infoIcon {
+    @include sprite($images-list-Info-14);
+  }
+  &.ssi-renameIcon {
+    @include sprite($images-list-Edit-14);
+  }
+  &.ssi-selectIcon {
+    @include sprite($images-list-Checked-Checkbox-2-14);
+  }
+  &.ssi-sortIcon {
+    @include sprite($images-list-Descending-Sorting-14);
+  }
+  &.ssi-sortDateIcon {
+    @include sprite($images-list-date-14);
+  }
+  &.ssi-sortSizeIcon {
+    @include sprite($images-list-Original-Size-14);
+  }
+  &.ssi-sortTypeIcon {
+    @include sprite($images-list-Image-File-14);
+  }
+  &.ssi-sortNameIcon {
+    @include sprite($images-list-Alphabetical-Sorting-14);
+  }
+  &.ssi-sizeIcon {
+    @include sprite($images-list-Small-Icons-Filled-14);
+  }
+  &.ssi-selectionIcon {
+    @include sprite($images-list-Checked-Checkbox-2-14);
+  }
+  &.ssi-selectFilesIcon {
+    @include sprite($images-list-File-14);
+  }
+  &.ssi-selectAllIcon {
+    @include sprite($images-list-Globe-14);
+  }
+  &.ssi-selectFoldersIcon {
+    @include sprite($images-list-Folder-14);
+  }
+  &.ssi-rootIcon {
+    @include sprite($images-pathbar-Hashtag-Filled-20);
+  }
+  &.ssi-reverseIcon {
+    @include sprite($images-pathbar-Sort-17);
+  }
+  &.ssi-homeIcon {
+    @include sprite($images-pathbar-Home-Filled-15);
+  }
+  &.ssi-breadcrumbsIcon {
+    display: inline;
+    margin: 5px 0;
+    @include sprite($images-sidebar-Collapse-Arrow-15);
+  }
+
+  &.ssi-backIcon {
+    @include sprite($images-pathbar-Left-14);
+  }
+  &.ssi-fwIcon {
+    @include sprite($images-pathbar-Right-14);
+  }
+  &.ssi-upIcon {
+    @include sprite($images-pathbar-Up-14);
+  }
+  &.ssi-sideBarIcon {
+    @include sprite($images-pathbar-Menu-14);
+  }
+  &.ssi-imgBoxIcon {
+    @include sprite($images-item-Visible-20);
+  }
+  &.ssi-selectImgIcon {
+    @include sprite($images-item-Checked-Checkbox-2-15);
+  }
+  &.ssi-removeIcon {
+    @include sprite($images-item-Multiply-15);
+  }
+  &.ssi-checkItem {
+    @include sprite($images-item-Checkmark-30);
+  }
+  &.ssi-cleanBtn {
+    @include sprite($images-menu-Broom-Filled-11);
+  }
+  &.ssi-questionIcon {
+    @include sprite($images-menu-Question-Mark-Filled-152);
+    margin: 5px 0;
+  }
+  &.ssi-downIcon {
+    @include sprite($images-menu-Down-10);
+  }
+  &.ssi-openWithIcon {
+    @include sprite($images-list-openWith-14);
+  }
+  &.ssi-previewIcon {
+    @include sprite($images-list-CodePen-14);
+  }
+  &.ssi-detailsPreviewIcon {
+    @include sprite($images-list-DetailsPreview14);
+  }
+  &.ssi-iconsPreviewIcon {
+    @include sprite($images-list-iconsPreview-14);
+  }
+}
+
+.ssi-letterIcon {
+  text-transform: uppercase;
+  color: #4E71C1;
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 3px;
+}

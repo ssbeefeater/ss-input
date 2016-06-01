@@ -1,0 +1,18 @@
+.ssi-selectionPreview {
+  max-width: 125px;
+  &.ssi-textHolder {
+    .ssi-removeChoice {
+      float: right;
+    }
+    position: relative;
+    border: 1px solid #aaaaaa;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 25px;
+    line-height: 25px;
+    @extend .clearfix;
+    .ssi-pickItem {
+
+    }
+  }
+}
