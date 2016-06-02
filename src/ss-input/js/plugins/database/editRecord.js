@@ -60,11 +60,12 @@
                     closeAfter: false,
                     className: 'ssi-mBtn',
                     method: function (e, modal) {
-                        thisS.save(data[thisS.database.currentCollection.id], function (data, textStatus, xhr, formData) {
+                        var id = data[thisS.database.currentCollection.id];
+                        thisS.save(id, function (data, textStatus, xhr, formData) {
                             if (xhr.status == 200) {
                                 if (modal)
                                     modal.close();
-                                ssi.plugins['scan'].resetItem(data[thisS.database.currentCollection.id], (typeof data === 'object' && data.hasOwnProperty(thisS.database.currentCollection.id) ? data : formData));
+                                ssi.plugins['scan'].resetItem(id, (typeof data === 'object' && data.hasOwnProperty(thisS.database.currentCollection.id) ? data : formData));
                                 ssi.notify('success', thisS.translate('successSave'));
                             }
                         });
