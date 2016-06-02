@@ -69,7 +69,7 @@
         saveFile: function (path, content) {
             var thisS = this;
             var callback = function (data) {
-                thisS.ssi.notify('success', data)
+                thisS.ssi.notify('success', thisS.translate('fileSaved'))
             };
             this.sendRequest(path, content, callback, 'UPDATE');
             return this;

@@ -1,4 +1,3 @@
-
 gulp.task('sass', function () {
     gulp.src(config.paths.ss_inputSass)
      .pipe(sass(config.sassOptions))
