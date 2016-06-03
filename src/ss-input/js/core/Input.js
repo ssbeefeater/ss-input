@@ -63,7 +63,7 @@ Input.prototype = {
     },
     checkbox: function () {
         this.options.checked = (typeof this.defaultValue!=='undefined' ? this.defaultValue : this.options.checked);
-        this.$element = Ss_input.tools.template(Ss_input.templates.input['radio'], {options: this.options});
+        this.$element = Ss_input.tools.template(Ss_input.templates.input['checkbox'], {options: this.options});
     },
     setInput: function () {
         this.options.value = this.defaultValue;

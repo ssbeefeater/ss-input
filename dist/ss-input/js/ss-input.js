@@ -789,7 +789,7 @@ Input.prototype = {
     },
     checkbox: function () {
         this.options.checked = (typeof this.defaultValue!=='undefined' ? this.defaultValue : this.options.checked);
-        this.$element = Ss_input.tools.template(Ss_input.templates.input['radio'], {options: this.options});
+        this.$element = Ss_input.tools.template(Ss_input.templates.input['checkbox'], {options: this.options});
     },
     setInput: function () {
         this.options.value = this.defaultValue;
@@ -845,6 +845,7 @@ Ss_input.locale = {
         iconSize: 'Icon size',
         createFolder: 'Create folder',
         newFile: 'New file',
+        fileSaved: 'The file saved!',
         folderExistError: 'The folder with name $1 already exists!',
         previewType: 'Preview',
         refresh: 'Refresh',
@@ -863,6 +864,7 @@ Ss_input.locale = {
         uploadFiles: 'Upload files',
         url: 'Url',
         addSuccess: 'The file added to your list!',
+        successSave: 'The record saved!',
         invalidUrlError: 'The url you entered is not valid!',
         upload: 'Upload',
         limitError: 'You have reached the limit of $1 files.',
@@ -929,6 +931,7 @@ Ss_input.locale = {
         iconSize: 'Μέγεθος εικονιδίων',
         createFolder: 'Δημιουργία φακέλου',
         newFile: 'Νέο αρχείο',
+        fileSaved: 'Το αρχείο αποθηκεύτηκε!',
         folderExistError: 'Ο φάκελος με όνομα $1 υπάρχει ήδη',
         refresh: 'Ανανέωση',
         rename: 'Μετονομασία',
@@ -945,6 +948,7 @@ Ss_input.locale = {
         sort: 'Ταξινόμηση',
         url: 'Διεύθυνση url',
         addSuccess: 'Το αρχείο προστέθηκε στη λίστα !',
+        successSave: 'Η εγγραφή αποθηκεύτικε!',
         invalidUrlError: 'Η διεύθυνση URL που εισάγατε δεν είναι έγκυρη!',
         uploadFiles: 'Μεταφόρτωση αρχείων',
         limitError: 'Έχεις φταση στο όριο των $1 αρχείων.',
@@ -1056,10 +1060,11 @@ Ss_input.locale = {
             textarea:'<textarea  id = "<#=options.id#>"  name = "<#=options.name#>" class= "<#=options.className#>"  <#=options.readOnly#> ><#=options.value#></textarea>',
             text:'<input type = "<#=options.type#>" placeholder="<#= options.placeholder#>" id = "<#=options.id#>"  name = "<#=options.name#>" class= "<#=options.className#>" value = "<#=options.value#>"/ >',
             radioGroup:'<div class="ssi-radioGroup <#=options.className#>" id="<#=options.id#>" ><#=radioGroupItems#></div>',
-            radio:'<div class="ssi-radioItem"><label><#=options.label#></label><input type="<#=options.type#>"<#=options.checked?"checked":""#>  name="<#=options.name#>"  value="<#=options.value#>"/></div>'
+            radio:'<div class="ssi-radioItem"><label><#=options.label#></label><input type="<#=options.type#>"<#=options.checked?"checked":""#>  name="<#=options.name#>"  value="<#=options.value#>"/></div>',
+            checkbox:'<div class="ssi-radioItem"><input type="<#=options.type#>"<#=options.checked?"checked":""#>  name="<#=options.name#>"  value="<#=options.value#>"/></div>'
         },
         mainContent: '<div id="ssi-content" tabindex="1"><div id="ssi-menuButtons" class="ssi-menuButtons"></div><div id="ssi-topBarWrapper" class="ssi-topBarWrapper"> <div class="ssi-topBarButtonArea"></div><div id="ssi-topBar" class="ssi-topBar"> <div id="ssi-loader" class="ssi-hidden ssi-loadingIcon ssi-pathLoader"></div><div id="ssi-progressBar" class="ssi-progress"></div></div></div><div id="ssi-mainContent" class="ssi-mainContent"><div id="ssi-items" class="ssi-items"><div id="ssi-contentFiles"></div></div></div></div>',
-        bottomButtons: '<div id="ssi-bottomButtons" class="ssi-bottomButtons"><div id="ssi-leftButtons" class="ssi-leftButtons"></div><div id="ssi-rightButtons" class="ssi-rightButtons"></div></div>',
+        bottomButtons: '<div id="ssi-bottomButtons" class="ssi-bottomButtons"><div id="ssi-leftButtons" class="ssi-leftButtons"></div><div id="ssi-rightButtons" class="ssi-rightButtons"></div></div>'
     }
 })(jQuery);
 
@@ -4552,7 +4557,7 @@ Ss_input.locale = {
         saveFile: function (path, content) {
             var thisS = this;
             var callback = function (data) {
-                thisS.ssi.notify('success', data)
+                thisS.ssi.notify('success', thisS.translate('fileSaved'))
             };
             this.sendRequest(path, content, callback, 'UPDATE');
             return this;
