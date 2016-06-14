@@ -1,4 +1,4 @@
-# ssi-modal
+# ss-input
 
 Ss-input(Server side input) is an ajax, customizable, full feature and powerful file/database manager for the web.
 

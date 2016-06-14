@@ -54,6 +54,7 @@ var config = {
             './src/ss-input/js/plugins/nameBubble.js',
             './src/ss-input/js/plugins/contextMenu.js',
             './src/ss-input/js/plugins/select.js',
+            './src/ss-input/js/**/*.js',
             './src/ss-input/js/plugins/fileSystem/handlers/*.js'],
         ss_inputSassMain: './src/ss-input/styles/ss-input.scss',
         ss_inputSassFiles: ['./src/ss-input/styles/mixins.scss','./src/ss-input/styles/**/*.scss', '!./src/ss-input/styles/ss-input.scss'],

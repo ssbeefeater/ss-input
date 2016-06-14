@@ -112,6 +112,7 @@
 <script src="ss-input/js/plugins/nameBubble.js"></script>
 <script src="ss-input/js/plugins/contextMenu.js"></script>
 <script src="ss-input/js/plugins/select.js"></script>
+<script src="ss-input/js/plugins/fileSystem/download.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/deleteHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/imgBoxHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/infoBubbleHandler.js"></script>
@@ -352,6 +353,16 @@
                     }
                 }
             }
+        });
+        CKEDITOR.replace('editor1', {
+            width: '47%',
+            height: '200px',
+            removePlugins: 'toolbar',
+            allowedContent: true
+        });
+        tinymce.init({
+            menubar: false, statusbar: false, toolbar: false, selector: "#editor2",
+            theme: "modern", width: '47%', height: 200
         });
 
         //-------------------------------------------
