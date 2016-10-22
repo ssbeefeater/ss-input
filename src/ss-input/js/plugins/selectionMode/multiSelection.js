@@ -3,14 +3,18 @@
         template: {
             //  dataInput: '<input type="text" placeholder="<#=placeholder#>" class="ssi-dataUrlName" value="<#=value#>" name="<#=name#>" />',
             'inputField': "<td><#=input#></td>",
-            vertical: {
+            table: {
                 wrapper: '<table class="ssi-selectedItemWrapper  <#=className#> ssi-multiTable"><tr><th></th><# for (var i = 0, inputLength = inputs.length; i<inputLength; i++) { var input=inputs[i]; #><th><#= input.label #></th><#  } #><th></th></tr></table>',
                 item: '<tr data-ID="<#=id#>" <#=(dataCollection?"data-collection="+dataCollection:"")#>  class="ssi-removable  ssi-pickItem ssi-vertical <#=className#>"><td class="ssi-imgPosition"><div class="ssi-selectionPreview" style="background-image:url(\'<#=displayImage#>\')"></div><div class="ssi-itemName"><#=displayName#></div></td><#=inputs#><td class="ssi-btnPosition"><!--<#if(!className){#><a href="<#= displayImage #>" data-ssi_imgGroup="selectedImages<#=uniqueId#>" class="ssi-imgPreview ssi-imgBox"><div class="icon ssi-imgBoxIcon"></div></a><#}#>--><a href="#" class="ssi-removeChoice"><div class="icon ssi-removeIcon"></div></a></td><input type="hidden" name="<#=inputName#>" value="<#= selectionField #>"/></tr>'
+            },
+            boxes:{
+                wrapper: '<div class="ssi-selectedItemWrapper clearfix"></div>',
+                item: '<table data-ID="<#=id#>" style="float: left;" <#=(dataCollection?"data-collection="+dataCollection:"")#> class="ssi-removable  ssi-pickItem ssi-vertical  <#=className#>"><tr><td class="ssi-imgPosition"><div class="ssi-selectionPreview" style="background-image:url(\'<#=displayImage#>\')"><div id="ssi-actions"><a href="#" class="ssi-removeChoice"><div class="icon ssi-removeIcon"></div></a></div></div></td></tr><tr><td class="ssinput-mbtnplace"><div class="ssi-itemName"><#=displayName#></div><input type="hidden" name="<#=inputName#>" value="<#= selectionField #>"/></td></tr></table>'
             },
             displayFiles: '<div id="ssi-displayFilesWrapper"><button id="ssi-clearSelected" data-title="<#=selectedBtn#>" class="ssi-clearBtn ssi-mBtn ssi-tooltip"><div class="icon ssi-cleanBtn"></div></button><div data-title="<#=selectedTooltip#>" class="ssi-tooltip ssi-displayFiles"><#=selected#></div><button id="ssi-clearChecked" data-title="<#=checkedBtn#>" class="ssi-mBtn ssi-clearBtn ssi-tooltip"><div class="icon ssi-cleanBtn"></div></button><div id="ssi-displayCheckedFiles" data-title="<#=checkedTooltip#>" class="ssi-displayFiles ssi-tooltip"><#=checked#></div></div>'
         },
         defaults: {
-            template: 'vertical',
+            template: 'table',
             className: '',
             duplicate: true,
             inputName: 'files[]',
@@ -27,8 +31,17 @@
             this.selectedFilesCount = 0;
             this.checkedFilesCount = 0;
             var ssi = this.ssi;
+            if(this.options.template=='boxes' && this.options.input.length>0){
+            //removeIf(production)
+                console.log('Boxes template is not compatible with inputs!');
+            //endRemoveIf(production)
+                this.options.template='table';
+            }
+
             ssi.$element.addClass('ss-input ssi-multiPickMode');
-            $(this.options.content).eq(0).html(Ss_input.tools.template(this.template[this.options.template].wrapper, {
+            var wrapper=this.template[this.options.template].wrapper;
+            if(wrapper)
+            $(this.options.content).eq(0).html(Ss_input.tools.template(wrapper, {
                 className: this.options.className,
                 inputs: this.options.input
             }));
@@ -116,7 +129,16 @@
                 } catch (err) {
                 }
                 return false;
-            });
+            }).on({
+                mouseenter: function () {
+                    $(this).find('#ssi-actions')
+                        .fadeIn(200);
+                },
+                mouseleave: function () {
+                    $(this).find('#ssi-actions')
+                        .fadeOut(200);
+                }
+            }, '.ssi-selectionPreview');
         },
         reset: function () {
             this.checkedFilesCount = 0;

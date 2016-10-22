@@ -1481,7 +1481,7 @@ span.icon {
 .ssi-mainModal .ssi-bottomButtons {
   position: relative;
   width: 100%;
-  border: 1px solid #d8d8d8;
+  border: 1px solid #c5c4c4;
   border-bottom: none;
   float: left;
 }
@@ -1517,7 +1517,7 @@ span.icon {
 }
 
 .ssi-mainModal .ssi-items {
-  border-left: 1px solid #d8d8d8;
+  border-left: 1px solid #c5c4c4;
   height: 100%;
   width: auto;
   position: relative;
@@ -1529,7 +1529,7 @@ span.icon {
 }
 
 .ssi-mainModal .ssi-mainContent {
-  border-right: 1px solid #d8d8d8;
+  border-right: 1px solid #c5c4c4;
   width: 100%;
   float: left;
 }
@@ -1538,14 +1538,14 @@ span.icon {
   position: relative;
   width: 100%;
   outline: transparent;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid #c5c4c4;
 }
 
 .ssi-mainModal .ssi-topBarWrapper {
   position: relative;
   width: 100%;
   height: 25px;
-  border: 1px solid #d8d8d8;
+  border: 1px solid #c5c4c4;
   float: left;
   overflow: hidden;
 }
@@ -1576,7 +1576,7 @@ span.icon {
 }
 
 .ssi-mainModal .ssi-topBarWrapper .ssi-topBarButtonArea {
-  border-right: 1px solid #d8d8d8;
+  border-right: 1px solid #c5c4c4;
   font-size: 12px;
   width: auto;
   float: left;
