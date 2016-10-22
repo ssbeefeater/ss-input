@@ -73,3 +73,28 @@
   }
 
 }
+
+.ssi-pickItem {
+  &.ssi-table, &.ssi-box {
+    display: table-row;
+    .ssi-selectionPreview {
+      border: 1px solid #ededed;
+      position: relative;
+      height: 60px;
+      width: 80px;
+      background-size: cover;
+    }
+    .ssi-itemName {
+      margin-top: 3px;
+    }
+  }
+  &.ssi-box {
+    .ssi-selectionPreview {
+      height: 100px;
+      width: 120px;
+    }
+    .ssi-itemName {
+      width: 120px;
+    }
+  }
+}

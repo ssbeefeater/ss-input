@@ -10,26 +10,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .ssi-selectionPreview {
+    .ssi-selectionPreview {
     position: relative;
     width: 120px;
   }
-
-  &.ssi-vertical {
-    display: table-row;
-    .ssi-selectionPreview {
-      border:1px solid #ededed;
-      position: relative;
-      height: 60px;
-      width: 80px;
-      background-size: cover;
-    }
-    .ssi-itemName{
-      margin-top: 3px;
-    }
-  }
-
-
 
   .ssi-dataUrlName {
     width: 120px;

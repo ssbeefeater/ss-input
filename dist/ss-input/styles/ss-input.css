@@ -1261,6 +1261,23 @@ span.icon {
   outline: none;
 }
 
+.ssi-selectionPreview {
+  max-width: 125px;
+}
+
+.ssi-selectionPreview.ssi-textHolder {
+  position: relative;
+  border: 1px solid #aaaaaa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 25px;
+  line-height: 25px;
+}
+
+.ssi-selectionPreview.ssi-textHolder .ssi-removeChoice {
+  float: right;
+}
+
 .ssi-mainModal .ssi-multiTable {
   max-width: 70%;
 }
@@ -1340,6 +1357,31 @@ span.icon {
   margin: 0 1px 0 8px;
 }
 
+.ssi-pickItem.ssi-table, .ssi-pickItem.ssi-box {
+  display: table-row;
+}
+
+.ssi-pickItem.ssi-table .ssi-selectionPreview, .ssi-pickItem.ssi-box .ssi-selectionPreview {
+  border: 1px solid #ededed;
+  position: relative;
+  height: 60px;
+  width: 80px;
+  background-size: cover;
+}
+
+.ssi-pickItem.ssi-table .ssi-itemName, .ssi-pickItem.ssi-box .ssi-itemName {
+  margin-top: 3px;
+}
+
+.ssi-pickItem.ssi-box .ssi-selectionPreview {
+  height: 100px;
+  width: 120px;
+}
+
+.ssi-pickItem.ssi-box .ssi-itemName {
+  width: 120px;
+}
+
 .ssi-pickItem {
   margin: 4px 3px;
   display: inline-block;
@@ -1359,22 +1401,6 @@ span.icon {
   width: 120px;
 }
 
-.ssi-pickItem.ssi-vertical {
-  display: table-row;
-}
-
-.ssi-pickItem.ssi-vertical .ssi-selectionPreview {
-  border: 1px solid #ededed;
-  position: relative;
-  height: 60px;
-  width: 80px;
-  background-size: cover;
-}
-
-.ssi-pickItem.ssi-vertical .ssi-itemName {
-  margin-top: 3px;
-}
-
 .ssi-pickItem .ssi-dataUrlName {
   width: 120px;
 }
@@ -1392,23 +1418,6 @@ span.icon {
   width: 120px;
   height: 95px;
   overflow: hidden;
-}
-
-.ssi-selectionPreview {
-  max-width: 125px;
-}
-
-.ssi-selectionPreview.ssi-textHolder {
-  position: relative;
-  border: 1px solid #aaaaaa;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 25px;
-  line-height: 25px;
-}
-
-.ssi-selectionPreview.ssi-textHolder .ssi-removeChoice {
-  float: right;
 }
 
 /* endinject */
