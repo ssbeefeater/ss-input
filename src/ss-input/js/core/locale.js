@@ -77,7 +77,10 @@ Ss_input.locale = {
         textFiles: 'Text files',
         path: 'Path',
         ext: 'Extension',
-        mimeType: 'Media type'
+        mimeType: 'Media type',
+        download:'Download',
+        openWith:'Open with...'
+
     },
     gr: {
         extError: 'Τα $1 αρχεία δεν υποστηρίζονται',
@@ -157,6 +160,8 @@ Ss_input.locale = {
         checkedBtn: 'Εκκαθάριση στιγματισμένα αρχείων',
         addUrl: 'Προσθήκη συνδέσμου',
         noItems: 'Δεν υπαρχει κάτι...',
-        mimeType: 'Τύπος'
+        mimeType: 'Τύπος',
+        download:'Κατέβασμα',
+        openWith:'Άνοιγμα με...'
     }
 };

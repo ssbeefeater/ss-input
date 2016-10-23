@@ -24,6 +24,7 @@ span.icon {
 .icon {
   float: left;
   &.ssi-downloadIcon {
+    @include sprite($images-list-CodePen-14);
     //@include sprite($images-list-download);
   }
   &.ssi-searchIcon {

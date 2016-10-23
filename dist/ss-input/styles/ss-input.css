@@ -41,6 +41,15 @@ span.icon {
   float: left;
 }
 
+.icon.ssi-downloadIcon, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView.ssi-fileSystem ul a.ssi-downloadIcon.ssi-listAnchor:before, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView ul li.parent > a.ssi-downloadIcon:first-child {
+  background-position: 0px -120px;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
 .icon.ssi-searchIcon, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView.ssi-fileSystem ul a.ssi-searchIcon.ssi-listAnchor:before, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView ul li.parent > a.ssi-searchIcon:first-child {
   background-position: 0px -733px;
   background-repeat: no-repeat;
