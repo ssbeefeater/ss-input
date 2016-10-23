@@ -9,6 +9,10 @@
   background-image: url("images/sprite.png");
 }
 
+.icon, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView.ssi-fileSystem ul a.ssi-listAnchor:before, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView.ssi-fileSystem ul a.ssi-listAnchor.ssi-treeViewRCurrent:before, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView ul li.parent > a:first-child, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView ul li.parent.active > a:first-child {
+  background-image: url("images/sprite.png");
+}
+
 span.icon {
   float: left;
   margin: 0 5px 0 3px;
@@ -523,10 +527,6 @@ span.icon {
   font-weight: 700;
   font-size: 16px;
   margin: 0 3px;
-}
-
-.icon, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView.ssi-fileSystem ul a.ssi-listAnchor:before, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView.ssi-fileSystem ul a.ssi-listAnchor.ssi-treeViewRCurrent:before, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView ul li.parent > a:first-child, .ssi-mainModal #ssi-sidebar #ssi-sidebarContent.ssi-treeView ul li.parent.active > a:first-child {
-  background-image: url("images/sprite.png");
 }
 
 .ssi-mBtn {
@@ -1278,6 +1278,44 @@ span.icon {
   float: right;
 }
 
+.ssi-pickItem {
+  margin: 4px 3px;
+  display: inline-block;
+  padding: 0;
+}
+
+.ssi-pickItem .ssi-itemName {
+  min-height: 14px;
+  width: 105px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ssi-pickItem .ssi-selectionPreview {
+  position: relative;
+  width: 120px;
+}
+
+.ssi-pickItem .ssi-dataUrlName {
+  width: 120px;
+}
+
+.ssi-pickItem .ssi-singleImg {
+  width: 120px;
+  height: 95px;
+}
+
+.ssi-pickItem .ssi-pick {
+  background-size: cover;
+  background-image: url("images/system/placeholder.png");
+  border: 3px solid #0b69a3;
+  cursor: pointer;
+  width: 120px;
+  height: 95px;
+  overflow: hidden;
+}
+
 .ssi-mainModal .ssi-multiTable {
   max-width: 70%;
 }
@@ -1380,44 +1418,6 @@ span.icon {
 
 .ssi-pickItem.ssi-box .ssi-itemName {
   width: 120px;
-}
-
-.ssi-pickItem {
-  margin: 4px 3px;
-  display: inline-block;
-  padding: 0;
-}
-
-.ssi-pickItem .ssi-itemName {
-  min-height: 14px;
-  width: 105px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ssi-pickItem .ssi-selectionPreview {
-  position: relative;
-  width: 120px;
-}
-
-.ssi-pickItem .ssi-dataUrlName {
-  width: 120px;
-}
-
-.ssi-pickItem .ssi-singleImg {
-  width: 120px;
-  height: 95px;
-}
-
-.ssi-pickItem .ssi-pick {
-  background-size: cover;
-  background-image: url("images/system/placeholder.png");
-  border: 3px solid #0b69a3;
-  cursor: pointer;
-  width: 120px;
-  height: 95px;
-  overflow: hidden;
 }
 
 /* endinject */

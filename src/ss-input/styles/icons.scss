@@ -23,6 +23,9 @@ span.icon {
 }
 .icon {
   float: left;
+  &.ssi-downloadIcon {
+    //@include sprite($images-list-download);
+  }
   &.ssi-searchIcon {
     @include sprite($images-menu-Search-Filled-18);
   }
