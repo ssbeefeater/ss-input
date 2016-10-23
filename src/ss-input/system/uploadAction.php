@@ -15,8 +15,6 @@ try {
             $path .= '/';
         }
         $path .= str_replace(' ','-',$name);
-        throw new Exception('Exist');
-
         if (file_exists($path)) {
             throw new Exception('Exist');
         } else {
