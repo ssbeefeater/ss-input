@@ -253,8 +253,8 @@
             case 'openWith':
                 this.$content.find(this.buttonSelectors['contextMenu']).append(this.addButton({
                     id: 'ssi-openWithBtn',
-                    title: 'openWith', //this.language.openWith,
-                    label: '<span class="icon ssi-openWithIcon"></span>openWith',
+                    title: this.language.openWith,
+                    label: '<span class="icon ssi-openWithIcon"></span>'+this.language.openWith,
                     selectionRequired: true,
                     subMenu: true
                 }, 'listButton', false));
