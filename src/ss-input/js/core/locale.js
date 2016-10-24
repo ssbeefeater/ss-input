@@ -242,7 +242,7 @@ Ss_input.locale = {
         textFiles: 'Pliki tekstowe',
         path: 'Ścieżka',
         ext: 'Rozszerzenie',
-        mimeType: 'Typ multimediów'
+        mimeType: 'Typ multimediów',
         download: 'Pobierz',
         openWith: 'Otwórz za pomocą...'
     }
