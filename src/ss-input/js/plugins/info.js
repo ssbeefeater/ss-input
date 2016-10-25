@@ -23,7 +23,7 @@
                 id: '',
                 keyPress: {
                     keyCode: '73',
-                    ctrl: true,
+                    ctrl: true
                 },
                 className: 'ssi-detailsButton',
                 method: function () {
@@ -54,6 +54,7 @@
                         dataField=data[i][dataName];
                     }else{
                         dataField=Ss_input.tools.escapeHtml(data[i][dataName]);
+                        console.log(dataField);
                         if(dataField.split(' ').length>5){
                             dataField='<div class="ssi-longText">'+dataField+'</div>'
                         }
@@ -98,7 +99,7 @@
                     }, onShow: function () {
                         ssi.$element.trigger('infoShowAction.ssi', [$details]);
                     }
-                }).get$content();
+                });
             }
         }
     })

@@ -253,6 +253,8 @@
                 valueSplit = value.split(/:(.+)?/, 2);
                 return (valueSplit[0] == ssi.currentCollection.id || !valueSplit[1]);
             });
+
+            $content.find('.ssi-checked').removeClass('ssi-checked');
             $content.find('span.ssi-checkItem').remove();
             for (var i = 0, length = ssi_mSelect.length; i < length; i++) {
                 valueSplit = ssi_mSelect[i].split(/:(.+)?/, 2);
@@ -311,8 +313,6 @@
                 .prop("disabled", false);
         },
         unCheckItem: function (id) {
-            id = id.split(/:(.+)?/, 2);
-            id = id[1] || id[0];
             Ss_input.tools.removeFromArray(this.checkedItems, id);
             if (this.checkedItems.length === 0) {
                 $('.ssi-insertBtn')
