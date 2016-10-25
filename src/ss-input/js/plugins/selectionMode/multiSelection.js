@@ -7,7 +7,7 @@
                 wrapper: '<table class="ssi-selectedItemWrapper  <#=className#> ssi-multiTable"><tr><th></th><# for (var i = 0, inputLength = inputs.length; i<inputLength; i++) { var input=inputs[i]; #><th><#= input.label #></th><#  } #><th></th></tr></table>',
                 item: '<tr data-ID="<#=id#>" <#=(dataCollection?"data-collection="+dataCollection:"")#>  class="ssi-removable  ssi-pickItem ssi-table <#=className#>"><td class="ssi-imgPosition"><div class="ssi-selectionPreview" style="background-image:url(\'<#=displayImage#>\')"></div><div class="ssi-itemName"><#=displayName#></div></td><#=inputs#><td class="ssi-btnPosition"><!--<#if(!className){#><a href="<#= displayImage #>" data-ssi_imgGroup="selectedImages<#=uniqueId#>" class="ssi-imgPreview ssi-imgBox"><div class="icon ssi-imgBoxIcon"></div></a><#}#>--><a href="#" class="ssi-removeChoice"><div class="icon ssi-removeIcon"></div></a></td><input type="hidden" name="<#=inputName#>" value="<#= selectionField #>"/></tr>'
             },
-            boxes:{
+            boxes: {
                 wrapper: '<div class="ssi-selectedItemWrapper clearfix ssi-boxes"></div>',
                 item: '<table data-ID="<#=id#>" style="float: left;" <#=(dataCollection?"data-collection="+dataCollection:"")#> class="ssi-removable  ssi-pickItem ssi-box  <#=className#>"><tr><td class="ssi-imgPosition"><div class="ssi-selectionPreview" style="background-image:url(\'<#=displayImage#>\')"><div id="ssi-actions"><a href="#" class="ssi-removeChoice"><div class="icon ssi-removeIcon"></div></a></div></div></td></tr><tr><td class="ssinput-mbtnplace"><div class="ssi-itemName"><#=displayName#></div><input type="hidden" name="<#=inputName#>" value="<#= selectionField #>"/></td></tr></table>'
             },
@@ -31,20 +31,20 @@
             this.selectedFilesCount = 0;
             this.checkedFilesCount = 0;
             var ssi = this.ssi;
-            if(this.options.template=='boxes' && this.options.input.length>0){
-            //removeIf(production)
+            if (this.options.template == 'boxes' && this.options.input.length > 0) {
+                //removeIf(production)
                 console.log('Boxes template is not compatible with inputs!');
-            //endRemoveIf(production)
-                this.options.template='table';
+                //endRemoveIf(production)
+                this.options.template = 'table';
             }
 
             ssi.$element.addClass('ss-input ssi-multiPickMode');
-            var wrapper=this.template[this.options.template].wrapper;
-            if(wrapper)
-            $(this.options.content).eq(0).html(Ss_input.tools.template(wrapper, {
-                className: this.options.className,
-                inputs: this.options.input
-            }));
+            var wrapper = this.template[this.options.template].wrapper;
+            if (wrapper)
+                $(this.options.content).eq(0).html(Ss_input.tools.template(wrapper, {
+                    className: this.options.className,
+                    inputs: this.options.input
+                }));
 
             if (this.options.defaultValue) {
                 var length = this.options.defaultValue.length;
@@ -149,7 +149,7 @@
             } else {
                 this.ssi.$content.find('#ssi-displayCheckedFiles').html('0');
                 this.ssi.$content.find('.ssi-checked').removeClass('ssi-checked')
-                 .find('.ssi-checkItem').remove();
+                    .find('.ssi-checkItem').remove();
             }
             this.ssi.$content.find('#ssi-displaySelectedFiles').html(this.selectedFilesCount);
         },
@@ -174,8 +174,14 @@
                     content.push(item);
                     this.selectedFilesCount++;
                 }
+                if (!defaults) {
+                    var idFixed = id.split(/:(.+)?/, 2);
+                    idFixed = idFixed[1] || idFixed[0];
+                    this.checkedItems[y] = idFixed;
+                }
             }
             $content.children('.ssi-selectedItemWrapper').append(content);
+            if (!defaults)this.ssi.$element.trigger('selectAction', [this.checkedItems]);
             this.checkedItems = [];
         },
         getTemplate: function (id, defaultValue, silent) {
@@ -237,7 +243,7 @@
                 this.addCheck('', $target);
                 this.checkItem(id, silent);
             }
-            this.ssi.$content.find('#ssi-displayCheckedFiles').html(this.checkedFilesCount)
+            this.ssi.$content.find('#ssi-displayCheckedFiles').html(this.checkedFilesCount);
             return this;
         },
         setMChecked: function ($content) {
@@ -266,8 +272,8 @@
         },
         removeSelectedImage: function (e) {
             var item = $(e.target).parents('.ssi-pickItem');
+            var id = item.attr('data-ID');
             if (!this.options.duplicate) {
-                var id = item.attr('data-ID');
                 var collection = item.attr('data-collection');
                 Ss_input.tools.removeFromArray(this.selected, collection ? collection + ':' + id : id);
             }
@@ -275,6 +281,7 @@
             if (this.radioButtons) {
                 setRadioNames(this);
             }
+            this.ssi.$element.trigger('removeAction', id);
         },
         addCheck: function (id, target, $content) {
             var $target;
@@ -284,7 +291,7 @@
                 $target = this.ssi.get$mainElementById(id, $content);
             }
             $target.append('<span class="icon ssi-checkItem"></span>')
-             .addClass('ssi-checked');
+                .addClass('ssi-checked');
         },
         checkItem: function (id, silent) {
             if (id instanceof Array) {
@@ -300,8 +307,8 @@
                 this.checkedItems.push(id);
             }
             this.ssi.$content.parents('.ssi-mainModal').find('.ssi-insertBtn')
-             .removeClass('disabled')
-             .prop("disabled", false);
+                .removeClass('disabled')
+                .prop("disabled", false);
         },
         unCheckItem: function (id) {
             id = id.split(/:(.+)?/, 2);
@@ -309,13 +316,13 @@
             Ss_input.tools.removeFromArray(this.checkedItems, id);
             if (this.checkedItems.length === 0) {
                 $('.ssi-insertBtn')
-                 .addClass('disabled')
-                 .prop("disabled", true);
+                    .addClass('disabled')
+                    .prop("disabled", true);
             }
         },
         duplicate: function () {
             var newItems = Ss_input.tools.arrayValuesInArray(this.checkedItems, this.selected),
-             removedItems = Ss_input.tools.arrayValuesInArray(this.selected, this.checkedItems), dataSplit, id;
+                removedItems = Ss_input.tools.arrayValuesInArray(this.selected, this.checkedItems), dataSplit, id;
             this.selected = this.checkedItems.slice();
             var $content = $(this.options.content).eq(0).children('.ssi-selectedItemWrapper');
             for (var i = 0; i < removedItems.length; i++) {
@@ -342,8 +349,8 @@
             this.checkedFilesCount = 0;
             this.checkedItems = [];
             ssiContent.parents('.ssi-mainModal').find('.ssi-insertBtn')
-             .addClass('disabled')
-             .prop("disabled", true);
+                .addClass('disabled')
+                .prop("disabled", true);
         },
         clearSelected: function () {
             $(this.options.content).eq(0).find('.ssi-pickItem').remove();

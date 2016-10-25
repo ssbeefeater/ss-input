@@ -664,42 +664,6 @@ span.icon {
   color: #6d6d6d;
 }
 
-.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgS {
-  width: 80px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgS .ssi-displayDiv {
-  width: 80px;
-  height: 70px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgS .ssi-itemName {
-  width: 80px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgL {
-  width: 130px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgL .ssi-displayDiv {
-  width: 130px;
-  height: 120px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgL .ssi-itemName {
-  width: 130px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-details .ssi-itemWrapper.ssi-mImgS .ssi-displayDiv {
-  width: 50px;
-  height: 50px;
-}
-
-.ssi-mainModal #ssi-itemsWrapper.ssi-details .ssi-itemWrapper.ssi-mImgL .ssi-displayDiv {
-  width: 100px;
-  height: 100px;
-}
-
 .ssi-infoModal .ssi-infoCompare {
   border-collapse: collapse;
   font-size: 13px;
@@ -1136,6 +1100,42 @@ span.icon {
   background: #ffffff;
   color: #000;
   padding: 10px 25px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgS {
+  width: 80px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgS .ssi-displayDiv {
+  width: 80px;
+  height: 70px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgS .ssi-itemName {
+  width: 80px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgL {
+  width: 130px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgL .ssi-displayDiv {
+  width: 130px;
+  height: 120px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-icons .ssi-itemWrapper.ssi-mImgL .ssi-itemName {
+  width: 130px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-details .ssi-itemWrapper.ssi-mImgS .ssi-displayDiv {
+  width: 50px;
+  height: 50px;
+}
+
+.ssi-mainModal #ssi-itemsWrapper.ssi-details .ssi-itemWrapper.ssi-mImgL .ssi-displayDiv {
+  width: 100px;
+  height: 100px;
 }
 
 .ssi-mainModal #ssi-collectionTitle {
