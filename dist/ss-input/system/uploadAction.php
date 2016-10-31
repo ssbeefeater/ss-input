@@ -2,38 +2,38 @@
 try {
     require_once 'BaseController.php';
     $dir = $_POST ['currentDir'];
-    if (!isset ($dir) || $dir=='' || $dir=='/'|| $dir=='\\') {
+    if (!isset ($dir) || $dir == '' || $dir == '/' || $dir == '\\') {
         throw new Exception($translation["invalidDest"]);
     }
     $path = $maindir . $dir;
-    if(!file_exists($path)){
+    if (!file_exists($path)) {
         throw new Exception($translation["destFolderError"]);
     }
-    $name=$_FILES ['ssi-files'] ['name'];
-        $ext = pathinfo($name, PATHINFO_EXTENSION);
-        if (substr($path, strlen($path) - 1, 1) != '/') {
-            $path .= '/';
+    $name = $_FILES ['ssi-files'] ['name'];
+    $ext = pathinfo($name, PATHINFO_EXTENSION);
+    if (substr($path, strlen($path) - 1, 1) != '/') {
+        $path .= '/';
+    }
+    $path .= str_replace(' ', '-', $name);
+    if (file_exists($path)) {
+        throw new Exception('Exist');
+    } else {
+        if (!move_uploaded_file($_FILES ['ssi-files'] ['tmp_name'], $path)) {
+            $errors = error_get_last();
+            throw new ErrorException($errors ['message']);
         }
-        $path .= str_replace(' ','-',$name);
-        if (file_exists($path)) {
-            throw new Exception('Exist');
-        } else {
-            if (!move_uploaded_file($_FILES ['ssi-files'] ['tmp_name'], $path)) {
-                $errors = error_get_last();
-                throw new ErrorException($errors ['message']);
-            }
-            touch($path,time());
-        }
+        touch($path, time());
+    }
     echo json_encode(array(
         'type' => 'success',
         'msg' => $translation["success"]
     ));
-}catch(ErrorException $err){
+} catch (ErrorException $err) {
     echo json_encode(array(
         'type' => 'cons',
         'msg' => $err->getMessage()
     ));
-}catch (Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array(
         'type' => 'error',
         'msg' => $e->getMessage()

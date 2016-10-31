@@ -3,8 +3,7 @@
  * Remove some functions from prototype to make them private.
  * New download plugin.
  * Update uploadAction.php and upload.js plugin to be compatible with the new ssi-uploader version.
- * Fix some bugs in multiSelection mode. 
- * Fix some bugs in multiSelection mode. 
+ * Fix some bugs in multiSelection mode.  
  * Fix a "strict standards" warning in uploadAction.php. 
 
 
