@@ -48,7 +48,7 @@
             }
             var ext=Ss_input.tools.getExtension(name);
             if ($.inArray(ext,ssi.fileSystem.options.allowed)==-1) {
-                ssi.notify('error', this.translate('extError').replaceText(ext));
+                ssi.notify('error',  Ss_input.tools.replaceText(this.translate('extError'),ext));
                 return;
             }
             var callback = function () {

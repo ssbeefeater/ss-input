@@ -67,14 +67,13 @@
                     var regex = new RegExp(/^(data:)([\w\/\+]+);(charset=[\w-]+|base64).*,(.*)/gi);
                     ext = regex.exec(url)[2].split('/')[1]
                 }
-
             }
             if (!image && !dataUri) {
                 ssi.notify('error', thisS.translate('invalidUrlError'));
                 return false;
             }
             if ($.inArray(ext, ssi.fileSystem.options.allowed) < 0 && !dataUri) {
-                ssi.notify('error', thisS.translate('extError').replaceText(ext));
+                ssi.notify('error', Ss_input.tools.replaceText(thisS.translate('extError'), ext));
                 return false;
             }
             return (dataUri ? 'dataUrl' : true);

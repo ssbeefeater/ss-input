@@ -45,11 +45,11 @@
                     className: this.options.className,
                     inputs: this.options.input
                 }));
-
             if (this.options.defaultValue) {
                 var length = this.options.defaultValue.length;
                 if (this.options.maxItems !== 0 && length > this.options.maxItems)length = length - this.options.maxItems;
                 for (var i = 0; i < length; i++) {
+                    if(this.options.defaultValue[i].value.indexOf(':')==-1){this.options.defaultValue[i].value='/:'+this.options.defaultValue[i].value}
                     this.checkedItems.push(this.options.defaultValue[i].value)
                 }
                 this.selectItems(this.options.defaultValue);
@@ -63,7 +63,12 @@
         },
         setButtons: function () {
             var thisS = this;
-            this.ssi.addButton([{
+            this.ssi.addButton({
+                closeAfter: true,
+                label: this.translate('cancel'),
+                className: "ssi-mBtn ssi-cancel"
+            }, 'menuButton', ['bottom']);
+            this.ssi.addButton({
                 label: this.translate('insert'),
                 className: "ssi-mBtn ssi-insertBtn disabled",
                 closeAfter: true,
@@ -73,11 +78,7 @@
                     if (thisS.ssi.options.showTo != 'modalWindow')
                         thisS.reset();
                 }
-            }, {
-                closeAfter: true,
-                label: this.translate('cancel'),
-                className: "ssi-mBtn ssi-cancel"
-            }], 'menuButton', ['bottom']);
+            }, 'menuButton', ['bottom']);
         },
         setEvents: function () {
             var thisS = this, ssi = this.ssi;
@@ -118,7 +119,9 @@
                     thisS.selectItems();
                     thisS.reset();
                 }).on('removeItemAction.ssi', function (e, id) {
-                    var checkedIndex = $.inArray(id, 'thisS.checkedItems')
+                    var checkedIndex = $.inArray(id, thisS.checkedItems);
+                    console.log(checkedIndex);
+                    console.log(thisS.checkedItems);
                 })
             });
             $(this.options.content).eq(0).on('click', '.ssi-removeChoice', function (e) {
@@ -235,7 +238,7 @@
             } else {
 
                 if (this.options.maxItems !== 0 && (this.options.duplicate ? this.selectedFilesCount + this.checkedFilesCount : this.checkedFilesCount) === this.options.maxItems) {
-                    this.ssi.notify('error', this.translate('limitError').replaceText(this.options.maxItems.toString()));
+                    this.ssi.notify('error', Ss_input.tools.replaceText(this.translate('limitError'), this.options.maxItems.toString()));
                     return;
                 }
 

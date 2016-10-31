@@ -54,7 +54,6 @@
                         dataField=data[i][dataName];
                     }else{
                         dataField=Ss_input.tools.escapeHtml(data[i][dataName]);
-                        console.log(dataField);
                         if(dataField.split(' ').length>5){
                             dataField='<div class="ssi-longText">'+dataField+'</div>'
                         }

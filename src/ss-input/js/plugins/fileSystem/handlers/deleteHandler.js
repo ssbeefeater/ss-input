@@ -11,7 +11,7 @@
         setEvents: function () {
             var ssi = this.ssi, thisS = this;
             this.ssi.$element.on('removeItemAction.ssi', function (e, id) {
-                if (!id.isFile(ssi.fileSystem.options.allowed)) {
+                if (!Ss_input.tools.isFile(id,ssi.fileSystem.options.allowed)) {
                     thisS.ssi.$element.trigger('removeCollectionAction.ssi', [id.replace(ssi.fileSystem.options.rootPath, '')]);
                     var sideBar = ssi.plugins['sidebar'];
                     if (sideBar) {

@@ -29,7 +29,7 @@
             var ssi = this.ssi, thisS = this;
             this.modalOptions = $.extend({}, {
                 sizeClass: 'mediumToLarge',
-                content: '<input type="file" multiple id="ssi-upload" />',
+                content: '<input type="file" multiple id="ssi-upload" name="ssi-files"/>',
                 title: this.translate('uploadFiles'),
                 className: "ssi-uploadModal",
                 keepContent: true

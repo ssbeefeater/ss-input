@@ -579,6 +579,10 @@ span.icon {
   color: #1d7588;
   font-size: 15px;
   padding: 0 2px 0 2px;
+  max-width: 25px;
+  max-height: 14px;
+  vertical-align: top;
+  overflow: hidden;
 }
 
 .ssi-mainModal .ssi-menuInput {

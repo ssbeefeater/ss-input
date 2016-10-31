@@ -40,7 +40,7 @@
                     return false;
                 });
             }).on('removeItemAction.ssi', function (e, data) {
-                if (!data.isFile(thisS.options.allowed))
+                if (!Ss_input.tools.isFile(data,thisS.options.allowed))
                     $(this).trigger('removeCollectionAction.ssi', [data.replace(thisS.options.rootPath, '')]);
             });
             return this;

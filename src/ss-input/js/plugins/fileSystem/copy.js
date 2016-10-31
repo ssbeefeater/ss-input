@@ -335,7 +335,7 @@
                     sizeClass: 'small',
                     className:'ssi-confirmModal',
                     fixedHeight: false,
-                    content: thisS.translate('replaceMsg').replaceText(name),
+                    content: Ss_input.tools.replaceText(thisS.translate('replaceMsg'),name),
                     buttons: buttons
                 });
             }

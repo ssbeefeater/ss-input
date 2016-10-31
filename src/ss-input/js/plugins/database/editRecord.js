@@ -38,7 +38,7 @@
                 content.append('<input type="hidden" class="ssi-inputField" name="' + this.database.id + '" value="' + data[this.database.currentCollection.id] + '">');
             }
             if (ssi.checkPermissions('write', 'saveAsNew'))
-                var topButtons = [{
+                var topButton = {
                     title: this.translate('saveAsNew'),
                     label: '<div class="icon ssi-saveIcon"></div>+',
                     method: function () {
@@ -52,7 +52,7 @@
                             type: 'POST'
                         });
                     }
-                }];
+                };
             var modalOptions = {
                 content: content[0].outerHTML,
                 buttons: [{
@@ -73,7 +73,7 @@
                 }]
             };
 
-            this.database.createWindow(modalOptions, topButtons);
+            this.database.createWindow(modalOptions, topButton);
         },
         save: function (id, callback, options) {
             var formData = this.database.getFormData();

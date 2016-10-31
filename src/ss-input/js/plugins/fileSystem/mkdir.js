@@ -45,7 +45,7 @@
              if (name && !ssi.readOnlyMode) {
                  var href = ssi.fileSystem.getPath(name);
                  if (ssi.getItemData('name', name)) {
-                     ssi.notify('error', this.translate('folderExistError').replaceText(name));
+                     ssi.notify('error', Ss_input.tools.replaceText(this.translate('folderExistError'),name));
                      return;
                  }
                  var callback = function () {

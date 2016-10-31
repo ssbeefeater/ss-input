@@ -1,49 +1,50 @@
 <?php
 try {
     require_once 'BaseController.php';
-    $dir =$_GET['currentDir'];
-    if (!isset($dir) || $dir=='' || $dir=='/'|| $dir=='\\') {
+    $dir = $_GET['currentDir'];
+    if (!isset($dir) || $dir == '' || $dir == '/' || $dir == '\\') {
         throw new Exception($translation["invalidSource"]);
     }
 
-        $dir = $maindir . '/' . $dir;
+    $dir = $maindir . '/' . $dir;
     $files = scandir($dir);
     $files = array_diff($files, array(
         '.',
         '..'
     ));
     if (!file_exists($dir)) {
-        throw new Exception(replaceText($translation["notExistsError"],$_GET['currentDir']));
+        throw new Exception(replaceText($translation["notExistsError"], $_GET['currentDir']));
     }
     $details = array();
     foreach ($files as $fileName) {
         $type = fileExtension($fileName);
         $filePath = $dir . '/' . $fileName;
-        $mimeType=mime_content_type ($filePath);
+        $mimeType = mime_content_type($filePath);
         if (in_array(strtolower($type), $allowed) || is_dir($filePath)) {
 
             $date = date("d/m/Y G:i a", filectime($filePath));
-            $path=str_replace('//','/',str_replace($GLOBALS['maindir'], '', $filePath));
+            $path = str_replace('//', '/', str_replace($GLOBALS['maindir'], '', $filePath));
             if (is_dir($filePath)) {
-                $type ='zzzzfolder';
-                $size =0; //for folder size run this (not recommended):round(folderSize($filePath) / 1024, 2)
+                $type = 'zzzzfolder';
+                $size = 0; //for folder size run this (not recommended):round(folderSize($filePath) / 1024, 2)
                 $width = '';
                 $height = '';
             } else {
-                if(array_shift(explode("/", $mimeType))=='image'){
+                $fileType = explode("/", $mimeType);
+                if (array_shift($fileType) == 'image') {
                     list($width, $height) = getimagesize($filePath);
-                }else{
+                } else {
                     $width = '';
                     $height = '';
                 }
                 $size = filesize($filePath);
             }
 
-            $fileInfo =array(
+            $fileInfo = array(
                 'name' => $fileName,
                 'mimeType' => $mimeType,
                 'date' => $date,
-                'path'=>$path,
+                'path' => $path,
                 'size' => size($size),
                 'ext' => $type,
                 'dimensions' => $width . 'x' . $height,
@@ -55,7 +56,7 @@ try {
         'type' => 'success',
         'msg' => $details
     ));
-}catch (Exception $e) {
+} catch (Exception $e) {
     echo json_encode(array(
         'type' => 'error',
         'msg' => $e->getMessage()
@@ -65,22 +66,22 @@ function fileExtension($file)
 {
     return pathinfo($file, PATHINFO_EXTENSION);
 }
+
 //@author http://stackoverflow.com/a/5502088/4801797
 function size($bytes)
 {
-    if ($bytes > 0)
-    {
+    if ($bytes > 0) {
         $unit = intval(log($bytes, 1024));
         $units = array('B', 'KB', 'MB', 'GB');
 
-        if (array_key_exists($unit, $units) === true)
-        {
+        if (array_key_exists($unit, $units) === true) {
             return sprintf('%d %s', $bytes / pow(1024, $unit), $units[$unit]);
         }
     }
 
     return $bytes;
 }
+
 function folderSize($dir)
 {
     $size = 0;

@@ -1,7 +1,7 @@
 (function ($, ssi_modal) {
 
     var ssi_buttons = {},
-     index = 0;
+        index = 0;
     this.Ss_input = function (element, option) {
         var defaults = {
             plugins: [],
@@ -76,7 +76,7 @@
 
         }
         if (this.options.showTo === 'modalWindow') {
-            this.setModal();
+            setModal(this);
         } else {
             var $showTo = $(this.options.showTo);
             if (!$showTo.is('div')) {
@@ -84,90 +84,36 @@
                 return;
             }
             thisS.$element.trigger('earlyShowAction');
-            var content = thisS.setContent();
+            var content = setContent(thisS);
             if (!content) {
                 return;
             }
             $showTo.first().addClass('ssi-mainModal').html(content);
-            thisS.setHeight();
+            setHeight(null, thisS);
         }
     };
-    Ss_input.prototype.setModal = function () {
-        var thisS = this;
-        $.extend(this.options.modalOptions, {
+    var setModal = function (thisS) {
+        $.extend(thisS.options.modalOptions, {
             className: "ssi-mainModal",
             onClose: function () {
                 thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi');
             }
         });
-        this.$element.on('click', function (e) {
+        thisS.$element.on('click', function (e) {
             e.preventDefault();
             thisS.$element.trigger('earlyShowAction');
             var $eTarget = $(e.target);
             if ($eTarget.hasClass('ss-input')) {
                 var modal = thisS.createWindow(thisS.options.modalOptions);
-                var content = thisS.setContent();
+                var content = setContent(thisS);
                 if (!content) {
                     modal.close();
                     return;
                 }
                 modal.setContent(content);
-                thisS.setHeight();
+                setHeight(null, thisS);
             }
         });
-    };
-    Ss_input.prototype.setAfterEvents = function () {
-        var optionsDiv, thisS = this;
-        $(window).bind('beforeunload', function () {
-            thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi').off('.ssi');
-        });
-
-        this.$content.on({
-            'mouseenter.ssi': function (e) {
-                e.preventDefault();
-                optionsDiv = $(this).find('.ssi-optionsDiv');
-                optionsDiv.fadeIn(200);//slideDown(100);
-            },
-            'mouseleave.ssi': function () {
-                if (optionsDiv.hasClass('selected') === false) {
-                    optionsDiv.fadeOut(200);//.slideUp(100);
-                }
-            }
-        }, '.ssi-displayDiv');
-        this.$element.on('closeAction.ssi', function () {
-            ssi_modal.removeAll();
-            thisS.currentCollection = {};
-            thisS.initializedButtons = [];
-            thisS.readOnlyMode = '';
-            $(this).off('.ssi');
-            $('body').off('.ssi');
-        });
-        this.$content.on('click', function (e) {
-            if (!$(e.target).is('input'))$(this).focus();
-        });
-
-    };
-    Ss_input.prototype.setContent = function () {
-        var checkPlugin = Ss_input.tools.keyExists(this.requireAfter, Ss_input.plugins);
-        var requirePending = Ss_input.tools.arrayValuesInArray(this.requireAfter, this.pluginNames);
-        this.pluginNames = this.pluginNames.concat(requirePending);
-        if (checkPlugin.length != 0) {
-            console.log('Some requirements are missing: ' + checkPlugin.toString());
-            return false;
-        }
-        this.$content = $(Ss_input.templates.mainContent);
-        if (this.options.showTo !== 'modalWindow') {
-            this.$content.append(Ss_input.templates.bottomButtons)
-        }
-        if ($.isEmptyObject(this.plugins)) {
-            this.pluginInit(this.pluginNames);
-        } else {
-            this.resetPlugins(this.plugins);
-        }
-        this.$element.trigger('showAction');
-        this.buttonsInit();
-        this.setAfterEvents();
-        return this.$content;
     };
     Ss_input.prototype.destroy = function () {
         this.$element.trigger('closeAction.ssi');
@@ -175,9 +121,6 @@
     };
     Ss_input.prototype.checkPermissions = function (permissions, name) {
         return ((permissions === 'read' || this.options.permissions[0] === 'all' || Ss_input.tools.arrayValuesInArray(permissions, this.options.permissions).length === 0 || $.inArray(name, this.options.permissions) !== -1) && ($.inArray(name, this.options.excludePlugin) === -1 || $.inArray(name, this.require) !== -1 || $.inArray(name, this.requireAfter) !== -1));
-    };
-    Ss_input.prototype.handlerInit = function (handler, plugin, handlersGroup) {
-        new Ss_input[handlersGroup][handler](this, plugin, handler);
     };
     Ss_input.prototype.pluginInit = function (plugins, pluginGroup) {
         plugins = Ss_input.tools.toArray(plugins);
@@ -201,9 +144,9 @@
                     if (Ss_input.tools.keyExists(notInitialized, this.plugins).length === 0 || Ss_input.tools.keyExists(notInitialized, this.corePlugins).length === 0) {
                         this[plugin.type][plugins[i]] = plugin;
                         if (Ss_input[this.handlersGroup].hasOwnProperty(plugins[i])) {
-                            this.handlerInit(plugins[i], plugin, this.handlersGroup);
+                            handlerInit(plugins[i], plugin, this.handlersGroup, this);
                         } else if (Ss_input.handlers.hasOwnProperty(plugins[i])) {
-                            this.handlerInit(plugins[i], plugin, 'handlers');
+                            handlerInit(plugins[i], plugin, 'handlers', this);
                         }
                         plugin.init();
                     } else {
@@ -222,114 +165,54 @@
         for (var pluginName in pluginGroup) {
             var plugin = pluginGroup[pluginName];
             if (Ss_input[this.handlersGroup].hasOwnProperty(pluginName)) {
-                this.handlerInit(pluginName, plugin, this.handlersGroup);
+                handlerInit(pluginName, plugin, this.handlersGroup, this);
             } else if (Ss_input.handlers.hasOwnProperty(pluginName)) {
-                this.handlerInit(pluginName, plugin, 'handlers');
+                handlerInit(pluginName, plugin, 'handlers', this);
             }
             plugin.init();
         }
     };
-    Ss_input.prototype.coreButtonsInit = function (type) {
-        switch (Ss_input.tools.findKey(type, this.buttonSelectors)) {
-            case 'contextMenu':
-                break;
-            case 'actions':
-                this.$content.find(this.buttonSelectors['menu']).append(this.addButton({
-                    id: 'ssi-actionsBtn',
-                    title: this.language.actions,
-                    label: '<div class="icon ssi-actionsIcon"></div>',
-                    dropDown: true,
-                    selectionRequired: true
-                }, 'menuButton', false));
-                break;
-            case 'options':
-                this.$content.find(this.buttonSelectors['menu']).append(this.addButton({
-                    id: 'ssi-TasksBtn',
-                    title: this.language.options,
-                    label: '<div class="icon ssi-optionsIcon"></div>',
-                    dropDown: true
-                }, 'menuButton', false));
-                break;
-            case 'openWith':
-                this.$content.find(this.buttonSelectors['contextMenu']).append(this.addButton({
-                    id: 'ssi-openWithBtn',
-                    title: this.language.openWith,
-                    label: '<span class="icon ssi-openWithIcon"></span>'+this.language.openWith,
-                    selectionRequired: true,
-                    subMenu: true
-                }, 'listButton', false));
-                break;
-            case 'editWith':
-                this.$content.find(this.buttonSelectors['contextMenu']).append(this.addButton({
-                    id: 'ssi-editWithBtn',
-                    title: 'editWith', //this.language.openWith,
-                    label: '<span class="icon ssi-editWithIcon"></span>editWith',
-                    subMenu: true,
-                    selectionRequired: true
-                }, 'listButton', false));
-                break;
-        }
-    };
-    Ss_input.prototype.buttonsInit = function () {
-
-        var selectorList = this.buttonSelectors;
-        this.$content.find(selectorList['menu']).append(ssi_buttons[selectorList['menu']]);
-        delete  ssi_buttons[selectorList['menu']];
-        for (var selector in ssi_buttons) {
-            try {
-                var selectors = selector.split(','), toInitialize;
-                if ((toInitialize = Ss_input.tools.keyExists(selectors, this.initializedButtons)).length != 0) {
-                    for (var i = 0, length = toInitialize.length; i < length; i++) {
-                        this.initializedButtons[toInitialize[i]] = true;
-                        this.coreButtonsInit(toInitialize[i]);
-                    }
-                }
-                this.$content.find(selector).append(ssi_buttons[selector]);
-            } catch (err) {
-}
-        }
-        ssi_buttons = {};
-    };
     Ss_input.prototype.addButton = function (buttonOptions, type, appendTo, excludeItem) {
-        buttonOptions = Ss_input.tools.toArray(buttonOptions);
+        var validButtons = {
+            "menuButton": ['menu', 'bottom'],
+            "listButton": ['options', 'actions', 'contextMenu', 'openWith', 'editWith'],
+            "itemButton": []
+        };
         type = type || 'menuButton';
-        var buttons = [];
-        for (var y = 0, optionsLength = buttonOptions.length; y < optionsLength; y++) {
-            if (appendTo == 'bottom' && this.options.showTo === 'modalWindow') {
-                this.options.modalOptions.buttons.push(buttonOptions[y]);
-                continue;
-            }
-            var $btn = new Ss_input.Button(buttonOptions[y], type, this.$content);
-            if (appendTo) {
-                if (appendTo instanceof $) {
-                    appendTo.append($btn);
-                } else {
-                    if (appendTo != 'itemButton') {
-                        var ButtonWrapper = [];
-                        for (var i = 0, length = appendTo.length; i < length; i++) {
+        if (appendTo == 'bottom' && this.options.showTo === 'modalWindow') {
+            this.options.modalOptions.buttons.push(buttonOptions);
+            return;
+        }
+        var $btn = new Ss_input.Button(buttonOptions, type, this.$content);
+        if (appendTo) {
+            if (appendTo instanceof $) {
+                appendTo.append($btn);
+            } else {
+                if (type != 'itemButton') {
+                    var ButtonWrapper = [];
+                    for (var i = 0, length = appendTo.length; i < length; i++) {
+                        if ($.inArray(appendTo[i], validButtons[type]) !== -1)
                             ButtonWrapper.push(this.buttonSelectors[appendTo[i]]);
-                        }
-                        if (ssi_buttons.hasOwnProperty(ButtonWrapper.toString())) {
-                            ssi_buttons[ButtonWrapper.toString()].push($btn);
-                        } else {
-                            ssi_buttons[ButtonWrapper.toString()] = [$btn];
-                        }
-                        if (excludeItem && buttonOptions[y].selectionRequired) {
-                            this.ssi_excludeList[buttonOptions[y].className] = excludeItem;
-                        }
+                    }
+                    if (ssi_buttons.hasOwnProperty(ButtonWrapper.toString())) {
+                        ssi_buttons[ButtonWrapper.toString()].push($btn);
+                    } else {
+                        ssi_buttons[ButtonWrapper.toString()] = [$btn];
+                    }
+                    if (excludeItem && buttonOptions.selectionRequired) {
+                        this.ssi_excludeList[buttonOptions.className] = excludeItem;
                     }
                 }
             }
-            buttons.push($btn);
         }
-        return buttons.length == 1 ? buttons[0] : buttons;
+        return $btn;
     };
     Ss_input.prototype.notify = function (type, msg) {
         ssi_modal.notify(type, {overrideOther: true, content: msg})
     };
     Ss_input.prototype.checkExcludedButtons = function (onHide) {
         var excludeList = this.ssi_excludeList,
-         selected = this.get$selectedItems();
+            selected = this.get$selectedItems();
         var $mustSelect = this.$content.find('.ssi-mustSelect').removeClass('ssi-hidden disabled');
         for (var className in excludeList) {
             selected.each(function () {
@@ -415,7 +298,7 @@
                 itemList.push($(this).data('info'))
             });
         }
-        return itemList;
+        return itemList || [];
     };
     Ss_input.prototype.getItemData = function (key, value, path) {
         return Ss_input.tools.findByKey(this.getPageData(path), key, value);
@@ -441,9 +324,9 @@
                 if (e.lengthComputable) {
                     var percentComplete = e.loaded / e.total;
                     $progressBar
-                     .css({
-                         width: percentComplete * 100 + '%'
-                     });
+                        .css({
+                            width: percentComplete * 100 + '%'
+                        });
                 } else {
                     $progressBar.css('width', '100%');
                 }
@@ -459,7 +342,6 @@
                 thisS.$content.find('#ssi-loader').removeClass('ssi-hidden');
                 $progressBar.removeClass('ssi-hidden');
             }
-
         };
         options = $.extend({}, defaults, options);
         if (options.stringifyData) {
@@ -480,7 +362,6 @@
             <!--removeIf(production)-->
             /*
              <!--endRemoveIf(production)-->
-
              try {
              <!--removeIf(production)-->
              */
@@ -526,7 +407,6 @@
              <!--removeIf(production)-->
              */
             <!--endRemoveIf(production)-->
-
         }).fail(function (request, error) {
             if (catchError)
                 catchError();
@@ -535,11 +415,6 @@
         }).complete(function () {
             thisS.reloadProgressbar();
         })
-    };
-    Ss_input.prototype.setHeight = function (offset) {
-        offset = offset || (this.$content.hasClass('ssi-multiPickMode') && this.options.showTo != 'modalWindow' ? 115 : 70);
-        var height = parseInt(this.$content.parent().height()) - offset;
-        this.$content.find('#ssi-mainContent').css('height', height);
     };
     Ss_input.prototype.openCollection = function (id, url, data) {
         this.$element.trigger('changeCollectionAction.ssi');
@@ -551,10 +426,137 @@
         setTimeout(function () {
             thisS.$content.find('#ssi-loader').addClass('ssi-hidden');
             thisS.$content.find('#ssi-progressBar')
-             .addClass('ssi-hidden')
-             .css('width', 0 + '%');
+                .addClass('ssi-hidden')
+                .css('width', 0 + '%');
         }, 500);
     };
+    function handlerInit(handler, plugin, handlersGroup, thisS) {
+        new Ss_input[handlersGroup][handler](thisS, plugin, handler);
+    }
+
+    function setAfterEvents(thisS) {
+        var optionsDiv;
+        $(window).bind('beforeunload', function () {
+            thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi').off('.ssi');
+        });
+
+        thisS.$content.on({
+            'mouseenter.ssi': function (e) {
+                e.preventDefault();
+                optionsDiv = $(this).find('.ssi-optionsDiv');
+                optionsDiv.fadeIn(200);//slideDown(100);
+            },
+            'mouseleave.ssi': function () {
+                if (optionsDiv.hasClass('selected') === false) {
+                    optionsDiv.fadeOut(200);//.slideUp(100);
+                }
+            }
+        }, '.ssi-displayDiv');
+        thisS.$element.on('closeAction.ssi', function () {
+            ssi_modal.removeAll();
+            thisS.currentCollection = {};
+            thisS.initializedButtons = [];
+            thisS.readOnlyMode = '';
+            $(this).off('.ssi');
+            $('body').off('.ssi');
+        });
+        thisS.$content.on('click', function (e) {
+            if (!$(e.target).is('input'))$(this).focus();
+        });
+
+    }
+
+    function setContent(thisS) {
+        var checkPlugin = Ss_input.tools.keyExists(thisS.requireAfter, Ss_input.plugins);
+        var requirePending = Ss_input.tools.arrayValuesInArray(thisS.requireAfter, thisS.pluginNames);
+        thisS.pluginNames = thisS.pluginNames.concat(requirePending);
+        if (checkPlugin.length != 0) {
+            console.log('Some requirements are missing: ' + checkPlugin.toString());
+            return false;
+        }
+        thisS.$content = $(Ss_input.templates.mainContent);
+        if (thisS.options.showTo !== 'modalWindow') {
+            thisS.$content.append(Ss_input.templates.bottomButtons)
+        }
+        if ($.isEmptyObject(thisS.plugins)) {
+            thisS.pluginInit(thisS.pluginNames);
+        } else {
+            thisS.resetPlugins(thisS.plugins);
+        }
+        thisS.$element.trigger('showAction');
+        buttonsInit(thisS);
+        setAfterEvents(thisS);
+        return thisS.$content;
+    }
+
+    function coreButtonsInit(type, thisS) {
+        switch (Ss_input.tools.findKey(type, thisS.buttonSelectors)) {
+            case 'contextMenu':
+                break;
+            case 'actions':
+                thisS.$content.find(thisS.buttonSelectors['menu']).append(thisS.addButton({
+                    id: 'ssi-actionsBtn',
+                    title: thisS.language.actions,
+                    label: '<div class="icon ssi-actionsIcon"></div>',
+                    dropDown: true,
+                    selectionRequired: true
+                }, 'menuButton', false));
+                break;
+            case 'options':
+                thisS.$content.find(thisS.buttonSelectors['menu']).append(thisS.addButton({
+                    id: 'ssi-TasksBtn',
+                    title: thisS.language.options,
+                    label: '<div class="icon ssi-optionsIcon"></div>',
+                    dropDown: true
+                }, 'menuButton', false));
+                break;
+            case 'openWith':
+                thisS.$content.find(thisS.buttonSelectors['contextMenu']).append(thisS.addButton({
+                    id: 'ssi-openWithBtn',
+                    title: thisS.language.openWith,
+                    label: '<span class="icon ssi-openWithIcon"></span>' + thisS.language.openWith,
+                    selectionRequired: true,
+                    subMenu: true
+                }, 'listButton', false));
+                break;
+            case 'editWith':
+                thisS.$content.find(thisS.buttonSelectors['contextMenu']).append(thisS.addButton({
+                    id: 'ssi-editWithBtn',
+                    title: 'editWith', //thisS.language.openWith,
+                    label: '<span class="icon ssi-editWithIcon"></span>editWith',
+                    subMenu: true,
+                    selectionRequired: true
+                }, 'listButton', false));
+                break;
+        }
+    }
+
+    function buttonsInit(thisS) {
+        var selectorList = thisS.buttonSelectors;
+        thisS.$content.find(selectorList['menu']).append(ssi_buttons[selectorList['menu']]);
+        delete  ssi_buttons[selectorList['menu']];
+        for (var selector in ssi_buttons) {
+            try {
+                var selectors = selector.split(','), toInitialize;
+                if ((toInitialize = Ss_input.tools.keyExists(selectors, thisS.initializedButtons)).length != 0) {
+                    for (var i = 0, length = toInitialize.length; i < length; i++) {
+                        thisS.initializedButtons[toInitialize[i]] = true;
+                        coreButtonsInit(toInitialize[i], thisS);
+                    }
+                }
+                thisS.$content.find(selector).append(ssi_buttons[selector]);
+            } catch (err) {
+}
+        }
+        ssi_buttons = {};
+    }
+
+    function setHeight(offset, thisS) {
+        offset = offset || (thisS.$content.hasClass('ssi-multiPickMode') && thisS.options.showTo != 'modalWindow' ? 115 : 70);
+        var height = parseInt(thisS.$content.parent().height()) - offset;
+        thisS.$content.find('#ssi-mainContent').css('height', height);
+    }
+
     $.fn.ss_input = function (opts) {
         return this.each(function () {
             new Ss_input(this, opts)
@@ -906,338 +908,6 @@ Input.prototype = {
     }
 })(jQuery);
 
-(function ($) {
-    var entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
-    };
-    Ss_input.tools = {
-        dirname: function (path) {
-            return path.replace(/\\/g, '/')
-             .replace(/\/[^\/]*\/?$/, '');
-        },
-        getExtension: function (file) {
-            return file.split('.').pop().toLowerCase();
-        },
-        basename: function (url) {
-            return url.replace(/\\/g, '/').replace(/.*\//, '')
-        },
-        parseDate: function (input) {
-            var parts = input.match(/(\d+)/g);
-            return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4]);
-        },
-        //@author http://weblog.west-wind.com/posts/2008/Oct/13/Client-Templating-with-jQuery
-        template: function (str, data) {
-            var err = "";
-            try {
-                var strFunc =
-                 "var p=[],print=function(){p.push.apply(p,arguments);};" +
-                 "with(obj){p.push('" +
-                 str.replace(/[\r\t\n]/g, " ")
-                  .replace(/'(?=[^#]*#>)/g, "\t")
-                  .split("'").join("\\'")
-                  .split("\t").join("'")
-                  .replace(/<#=(.+?)#>/g, "',$1,'")
-                  .split("<#").join("');")
-                  .split("#>").join("p.push('")
-                 + "');}return p.join('');";
-                var func = new Function("obj", strFunc);
-                return func(data);
-            } catch (e) {
-                err = e.message;
-                console.log("< # ERROR: " + err + " # >");
-                console.log(e);
-            }
-
-        },
-
-        dataReplace: function (str, dataVariable) {
-            dataVariable = dataVariable || 'data';
-            return '"' + str.replace(/field:\((\w+)\)/g, (str.indexOf('condition:(') > -1 ? '' + dataVariable + '["$1"]' : '"+' + dataVariable + '["$1"]+"')).replace(/condition:(\(.*\))/g, '"+$1+"') + '"';
-
-        }, getField: function (str) {
-            return str.replace(/[\s\S]*field:\((\w+)\)[\s\S]*/, '$1')
-        }
-        , objReplace: function (str, dataVariable) {
-            dataVariable = dataVariable || 'data';
-            return str.replace(/field:\((\w+)\)/g, (dataVariable + '["$1"]').replace(/condition:(\(.*\))/g, '"+$1+"'));
-
-        },
-        fieldReplace: function (str, dataVariable) {
-            dataVariable = dataVariable || 'data';
-            return str.replace(/field:\((\w+)\)/g, dataVariable + '["$1"]');
-
-        },
-        arrayValuesInArray: function (valueArray, array) {
-            valueArray = this.toArray(valueArray);
-
-            var unmatched = [];
-            for (var i = 0, length = valueArray.length; i < length; i++) {
-                if (valueArray[i] && $.inArray(valueArray[i], array) === -1) {
-                    unmatched.push(valueArray[i]);
-                }
-            }
-            return unmatched;
-        },
-        arrayValueInArray: function (array1, array2) {
-            for (var i = 0, length = array1.length; i < length; i++) {
-                if (array1[i] && $.inArray(array1[i], array2) !== -1) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        keyExists: function (array, obj) {
-            array = this.toArray(array);
-            var unmatched = [];
-            for (var i = 0, length = array.length; i < length; i++) {
-                if (array[i] && !obj.hasOwnProperty(array[i])) {
-                    unmatched.push(array[i]);
-                }
-            }
-            return unmatched;
-        },
-        getDate: function () {
-            var d = new Date();
-            var month = d.getMonth() + 1;
-            var day = d.getDate();
-            return d.getFullYear() + '-' + (('' + month).length < 2 ? '0' : '') + month + '-' +
-             (('' + day).length < 2 ? '0' : '') + day;
-        },
-        urlUnion: function (url1, url2) {
-            var lastIndex = url1.length - 1;
-            if (url1[lastIndex] != '/' && url2[0] != '/') url1 += '/';
-            else if (url1[lastIndex] === '/' && url2[0] === '/')url2 = url2.substr(1);
-            return url1 += url2;
-        },
-        //@author http://stackoverflow.com/a/7847366/4801797
-        cachedImage: function (url) {
-            var test = document.createElement("img");
-            test.src = url;
-            return test.complete || test.width + test.height > 0;
-        },
-        cutFileName: function (word, ext, maxLength) {
-            if (typeof ext === 'undefined')ext = '';
-            if (typeof maxLength === 'undefined')maxLength = 10;
-            var min = 4;
-            if (maxLength < min)return;
-            var extLength = ext.length;
-            var wordLength = word.length;
-            if ((wordLength - 2) > maxLength) {
-                word = word.substring(0, maxLength);
-                var wl = word.length - extLength;
-                word = word.substring(0, wl);
-                return word + '...' + ext;
-
-            } else return word;
-
-        },
-        toArray: function (element) {
-            if (!(element instanceof Array)) {
-                element = [element];
-            }
-            return element;
-        },
-        findKey: function (value, obj) {
-            for (var key in obj) {
-                try {
-                    if (obj[key] === value)
-                        return key;
-                } catch (err) {
-
-                }
-            }
-        }, findByKey: function (array, key, value) {
-            for (var i = 0, length = array.length; i < length; i++) {
-                if (array[i][key] == value) {
-                    return array[i];
-                }
-            }
-            return false;
-        },
-        editUrl: function (url, path, toRemove) {
-            if (path === '')return url.replace(toRemove, '');
-            if (url.indexOf(path) < 0) {
-                url = this.urlUnion(path, url);
-            }
-            return url
-        },
-        removeMirrorValues: function (array) {
-            var mirrors;
-            do {
-                mirrors = false;
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i] === array[i + 1]) {
-                        array.splice(i, 1);
-                        mirrors = true;
-                    }
-                }
-            } while (mirrors == true);
-
-        },
-        arraySum: function (arr) {
-            var sum = 0;
-            for (var i = 0; i < arr.length; i++) {
-                sum += arr[i];
-            }
-            return sum;
-        },
-        loadImage: function (element, image, callback) {
-            element = element || $();
-            var ssi = this.ssi;
-            if (!image || image == 'undefined'){
-                element.parents('.ssi-itemWrapper').addClass('ssi-empty')
-                return;
-            }
-            if (!Ss_input.tools.cachedImage(image)) {
-                var spinner = $('<div class="ssi-loadingIcon ssi-itemLoader"></div>');
-                element.append(spinner);
-                $('<img/>').attr('src', image).load(function () {
-                    $(this).remove();
-                    spinner.remove();
-                    if (typeof callback === 'function') {
-                        callback(true);
-                    } else {
-                        element.css('background-image', 'url("' + image + '")');
-                    }
-                }).error(function () {
-                    $(this).remove();
-                    spinner.remove();
-                    if (typeof callback === 'function') {
-                        callback(false);
-                    } else {
-                        element.css('background-image', 'url("' + image + '")');
-                    }
-                    element.parents('.ssi-itemWrapper').addClass('ssi-empty')
-                });
-            } else {
-                element.css('background-image', 'url("' + image + '")');
-            }
-        },
-        escape: function (text) {
-            return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-        },
-        escapeHtml: function (string) {
-            return String(string).replace(/[&<>"'\/]/g, function (s) {
-                return entityMap[s];
-            });
-        },
-        removeObjFromArray: function (array, key, value) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i][key] === value) {
-                    array.splice(i, 1);
-                    break;
-                }
-            }
-        },
-        getFirstKey: function (obj) {
-            for (var key in obj) return key;
-        },
-        sanitizeInput: function (str) {
-            str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
-            return str.trim();
-        }
-        ,
-        removeFromArray: function (array, value) {
-            value = this.toArray(value);
-            for (var y = 0, vLength = value.length; y < vLength; y++) {
-                for (var i = 0, length = array.length; i < length; i++) {
-                    if (array[i] === value[y]) {
-                        array.splice(i, 1);
-                    }
-                }
-            }
-        }
-        ,
-        removeByKey: function (array, key) {
-            key = this.toArray(key);
-            for (var i = 0; i < key.length; i++) {
-                delete array[key[i]];
-            }
-        }
-        ,
-        tooltip: function ($target, text, returnOnly) {
-            $target = $($target);
-            text = text || $target.data('title');
-            if (!text)text = $target.attr('title');
-            if (!text)return;
-            var $toolTip = $('<div class="ssi-fadeOut ssi-fade ssi-tooltipText">'
-             + text +
-             '</div>').insertBefore($target);
-            $target.one('mouseleave', function () {
-                $toolTip.remove();
-            });
-            if (returnOnly)return $toolTip;
-            $toolTip.css({top: $target.position().top - $toolTip.height() - 12, left: $target.position().left})
-             .removeClass('ssi-fadeOut');
-
-            return $toolTip;
-        }
-        ,
-        getDataUri: function (url, callback) {//@author https://davidwalsh.name/convert-image-data-uri-javascript
-            var image = new Image();
-            image.setAttribute('crossOrigin', 'anonymous');
-            image.onload = function () {
-                var canvas = document.createElement('canvas');
-                canvas.width = this.naturalWidth;
-                canvas.height = this.naturalHeight;
-                canvas.getContext('2d').drawImage(this, 0, 0);
-                callback(canvas.toDataURL('image/png'));
-            };
-            image.src = url;
-        }
-    }
-    ;
-
-    String.prototype.isFile = function (array) {
-        if (array)
-            return array.indexOf(this.split('/').pop().split('.').pop()) > -1;
-        return this
-          .split('/').pop()
-          .split('.').length > 1;
-    };
-    String.prototype.fixUrl = function () {
-        var length = this.length;
-        var url = this;
-        if (url[length - 1] !== '/') {
-            url += '/'
-        }
-        return url
-    };
-    String.prototype.replaceText = function () {
-        var args = Array.apply(null, arguments);
-        var text = this;
-        for (var i = 0; i < args.length; i++) {
-            text = text.replace('$' + (i + 1), args[i])
-        }
-        return text;
-    };
-
-    $('body').on('mouseenter', '.ssi-tooltip', function (e) { //----------------------------tooltip----------------------------------------------
-         Ss_input.tools.tooltip(e.currentTarget);
-     }
-    ).on('mouseover', 'div.ssi-dropDownWrapper .parent', function (e) {//----------------------------dropDownMenu----------------------------------------------
-        $(e.currentTarget).children('ul').addClass('ssi-show');
-        $(e.currentTarget).closest('ul').css('overflow', 'visible')
-    }).on('mouseout', 'div.ssi-dropDownWrapper .parent,.ssi-dropOptions li>a', function (e) {
-        $(e.currentTarget).children('ul').removeClass('ssi-show');
-        $(e.currentTarget).closest('ul').css('overflow', '')
-    });
-
-})(jQuery);
-
-
-
-
-
-
-
-
-
 Ss_input.locale = {
     en: {
         extError: '$1 files are not supported',//$1=file extension ie(exe files are not supported)
@@ -1488,6 +1158,289 @@ Ss_input.locale = {
     }
 };
 (function ($) {
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+    Ss_input.tools = {
+        dirname: function (path) {
+            return path.replace(/\\/g, '/')
+                .replace(/\/[^\/]*\/?$/, '');
+        },
+        getExtension: function (file) {
+            return file.split('.').pop().toLowerCase();
+        },
+        basename: function (url) {
+            return url.replace(/\\/g, '/').replace(/.*\//, '')
+        },
+        parseDate: function (input) {
+            var parts = input.match(/(\d+)/g);
+            return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4]);
+        },
+        //@author http://weblog.west-wind.com/posts/2008/Oct/13/Client-Templating-with-jQuery
+        template: function (str, data) {
+            var err = "";
+            try {
+                var strFunc =
+                    "var p=[],print=function(){p.push.apply(p,arguments);};" +
+                    "with(obj){p.push('" +
+                    str.replace(/[\r\t\n]/g, " ")
+                        .replace(/'(?=[^#]*#>)/g, "\t")
+                        .split("'").join("\\'")
+                        .split("\t").join("'")
+                        .replace(/<#=(.+?)#>/g, "',$1,'")
+                        .split("<#").join("');")
+                        .split("#>").join("p.push('")
+                    + "');}return p.join('');";
+                var func = new Function("obj", strFunc);
+                return func(data);
+            } catch (e) {
+                err = e.message;
+                console.log("< # ERROR: " + err + " # >");
+                console.log(e);
+            }
+
+        },
+        dataReplace: function (str, dataVariable) {
+            dataVariable = dataVariable || 'data';
+            return '"' + str.replace(/field:\((\w+)\)/g, (str.indexOf('condition:(') > -1 ? '' + dataVariable + '["$1"]' : '"+' + dataVariable + '["$1"]+"')).replace(/condition:(\(.*\))/g, '"+$1+"') + '"';
+
+        },
+        fieldReplace: function (str, dataVariable) {
+            dataVariable = dataVariable || 'data';
+            return str.replace(/field:\((\w+)\)/g, dataVariable + '["$1"]');
+
+        },
+        arrayValuesInArray: function (valueArray, array) {
+            valueArray = this.toArray(valueArray);
+
+            var unmatched = [];
+            for (var i = 0, length = valueArray.length; i < length; i++) {
+                if (valueArray[i] && $.inArray(valueArray[i], array) === -1) {
+                    unmatched.push(valueArray[i]);
+                }
+            }
+            return unmatched;
+        },
+        keyExists: function (array, obj) {
+            array = this.toArray(array);
+            var unmatched = [];
+            for (var i = 0, length = array.length; i < length; i++) {
+                if (array[i] && !obj.hasOwnProperty(array[i])) {
+                    unmatched.push(array[i]);
+                }
+            }
+            return unmatched;
+        },
+        getDate: function () {
+            var d = new Date();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+            return d.getFullYear() + '-' + (('' + month).length < 2 ? '0' : '') + month + '-' +
+                (('' + day).length < 2 ? '0' : '') + day;
+        },
+        urlUnion: function (url1, url2) {
+            var lastIndex = url1.length - 1;
+            if (url1[lastIndex] != '/' && url2[0] != '/') url1 += '/';
+            else if (url1[lastIndex] === '/' && url2[0] === '/')url2 = url2.substr(1);
+            return url1 += url2;
+        },
+        //@author http://stackoverflow.com/a/7847366/4801797
+        cachedImage: function (url) {
+            var test = document.createElement("img");
+            test.src = url;
+            return test.complete || test.width + test.height > 0;
+        },
+        cutFileName: function (word, ext, maxLength) {
+            if (typeof ext === 'undefined')ext = '';
+            if (typeof maxLength === 'undefined')maxLength = 10;
+            var min = 4;
+            if (maxLength < min)return;
+            var extLength = ext.length;
+            var wordLength = word.length;
+            if ((wordLength - 2) > maxLength) {
+                word = word.substring(0, maxLength);
+                var wl = word.length - extLength;
+                word = word.substring(0, wl);
+                return word + '...' + ext;
+
+            } else return word;
+
+        },
+        toArray: function (element) {
+            if (!(element instanceof Array)) {
+                element = [element];
+            }
+            return element;
+        },
+        findKey: function (value, obj) {
+            for (var key in obj) {
+                try {
+                    if (obj[key] === value)
+                        return key;
+                } catch (err) {
+
+                }
+            }
+        },
+        findByKey: function (array, key, value) {
+            for (var i = 0, length = array.length; i < length; i++) {
+                if (array[i][key] == value) {
+                    return array[i];
+                }
+            }
+            return false;
+        },
+        removeMirrorValues: function (array) {
+            var mirrors;
+            do {
+                mirrors = false;
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i] === array[i + 1]) {
+                        array.splice(i, 1);
+                        mirrors = true;
+                    }
+                }
+            } while (mirrors == true);
+
+        },
+        arraySum: function (arr) {
+            var sum = 0;
+            for (var i = 0; i < arr.length; i++) {
+                sum += arr[i];
+            }
+            return sum;
+        },
+        loadImage: function (element, image, callback) {
+            element = element || $();
+            var ssi = this.ssi;
+            if (!image || image == 'undefined') {
+                element.parents('.ssi-itemWrapper').addClass('ssi-empty');
+                return;
+            }
+            if (!Ss_input.tools.cachedImage(image)) {
+                var spinner = $('<div class="ssi-loadingIcon ssi-itemLoader"></div>');
+                element.append(spinner);
+                $('<img/>').attr('src', image).load(function () {
+                    $(this).remove();
+                    spinner.remove();
+                    if (typeof callback === 'function') {
+                        callback(true);
+                    } else {
+                        element.css('background-image', 'url("' + image + '")');
+                    }
+                }).error(function () {
+                    $(this).remove();
+                    spinner.remove();
+                    if (typeof callback === 'function') {
+                        callback(false);
+                    } else {
+                        element.css('background-image', 'url("' + image + '")');
+                    }
+                    element.parents('.ssi-itemWrapper').addClass('ssi-empty')
+                });
+            } else {
+                element.css('background-image', 'url("' + image + '")');
+            }
+        },
+        escape: function (text) {
+            return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        },
+        escapeHtml: function (string) {
+            return String(string).replace(/[&<>"'\/]/g, function (s) {
+                return entityMap[s];
+            });
+        },
+        removeObjFromArray: function (array, key, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    array.splice(i, 1);
+                    break;
+                }
+            }
+        },
+        getFirstKey: function (obj) {
+            for (var key in obj) return key;
+        },
+        sanitizeInput: function (str) {
+            str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
+            return str.trim();
+        },
+        removeFromArray: function (array, value) {
+            value = this.toArray(value);
+            for (var y = 0, vLength = value.length; y < vLength; y++) {
+                for (var i = 0, length = array.length; i < length; i++) {
+                    if (array[i] === value[y]) {
+                        array.splice(i, 1);
+                    }
+                }
+            }
+        },
+        removeByKey: function (array, key) {
+            key = this.toArray(key);
+            for (var i = 0; i < key.length; i++) {
+                delete array[key[i]];
+            }
+        },
+        tooltip: function ($target, text, returnOnly) {
+            $target = $($target);
+            text = text || $target.data('title');
+            if (!text)text = $target.attr('title');
+            if (!text)return;
+            var $toolTip = $('<div class="ssi-fadeOut ssi-fade ssi-tooltipText">'
+                + text +
+                '</div>').insertBefore($target);
+            $target.one('mouseleave', function () {
+                $toolTip.remove();
+            });
+            if (returnOnly)return $toolTip;
+            $toolTip.css({top: $target.position().top - $toolTip.height() - 12, left: $target.position().left})
+                .removeClass('ssi-fadeOut');
+
+            return $toolTip;
+        },
+        isFile: function (str, array) {
+            if (array)
+                return array.indexOf(str.split('/').pop().split('.').pop()) > -1;
+            return str
+                    .split('/').pop()
+                    .split('.').length > 1;
+        },
+        replaceText: function (text) {
+            var args = Array.apply(null, arguments);
+            for (var i = 1; i < args.length; i++) {
+                text = text.replace('$' + (i), args[i])
+            }
+            return text;
+        }
+    };
+
+    $('body').on('mouseenter', '.ssi-tooltip', function (e) { //----------------------------tooltip----------------------------------------------
+            Ss_input.tools.tooltip(e.currentTarget);
+        }
+    ).on('mouseover', 'div.ssi-dropDownWrapper .parent', function (e) {//----------------------------dropDownMenu----------------------------------------------
+        $(e.currentTarget).children('ul').addClass('ssi-show');
+        $(e.currentTarget).closest('ul').css('overflow', 'visible')
+    }).on('mouseout', 'div.ssi-dropDownWrapper .parent,.ssi-dropOptions li>a', function (e) {
+        $(e.currentTarget).children('ul').removeClass('ssi-show');
+        $(e.currentTarget).closest('ul').css('overflow', '')
+    });
+
+})(jQuery);
+
+
+
+
+
+
+
+
+
+(function ($) {
     Ss_input.selectionMode = [];
     Ss_input.selection = [];
     Ss_input.modePlugins['selection'] = Ss_input.Plugin.extend({
@@ -1664,11 +1617,11 @@ Ss_input.locale = {
                     className: this.options.className,
                     inputs: this.options.input
                 }));
-
             if (this.options.defaultValue) {
                 var length = this.options.defaultValue.length;
                 if (this.options.maxItems !== 0 && length > this.options.maxItems)length = length - this.options.maxItems;
                 for (var i = 0; i < length; i++) {
+                    if(this.options.defaultValue[i].value.indexOf(':')==-1){this.options.defaultValue[i].value='/:'+this.options.defaultValue[i].value}
                     this.checkedItems.push(this.options.defaultValue[i].value)
                 }
                 this.selectItems(this.options.defaultValue);
@@ -1682,7 +1635,12 @@ Ss_input.locale = {
         },
         setButtons: function () {
             var thisS = this;
-            this.ssi.addButton([{
+            this.ssi.addButton({
+                closeAfter: true,
+                label: this.translate('cancel'),
+                className: "ssi-mBtn ssi-cancel"
+            }, 'menuButton', ['bottom']);
+            this.ssi.addButton({
                 label: this.translate('insert'),
                 className: "ssi-mBtn ssi-insertBtn disabled",
                 closeAfter: true,
@@ -1692,11 +1650,7 @@ Ss_input.locale = {
                     if (thisS.ssi.options.showTo != 'modalWindow')
                         thisS.reset();
                 }
-            }, {
-                closeAfter: true,
-                label: this.translate('cancel'),
-                className: "ssi-mBtn ssi-cancel"
-            }], 'menuButton', ['bottom']);
+            }, 'menuButton', ['bottom']);
         },
         setEvents: function () {
             var thisS = this, ssi = this.ssi;
@@ -1737,7 +1691,9 @@ Ss_input.locale = {
                     thisS.selectItems();
                     thisS.reset();
                 }).on('removeItemAction.ssi', function (e, id) {
-                    var checkedIndex = $.inArray(id, 'thisS.checkedItems')
+                    var checkedIndex = $.inArray(id, thisS.checkedItems);
+                    console.log(checkedIndex);
+                    console.log(thisS.checkedItems);
                 })
             });
             $(this.options.content).eq(0).on('click', '.ssi-removeChoice', function (e) {
@@ -1854,7 +1810,7 @@ Ss_input.locale = {
             } else {
 
                 if (this.options.maxItems !== 0 && (this.options.duplicate ? this.selectedFilesCount + this.checkedFilesCount : this.checkedFilesCount) === this.options.maxItems) {
-                    this.ssi.notify('error', this.translate('limitError').replaceText(this.options.maxItems.toString()));
+                    this.ssi.notify('error', Ss_input.tools.replaceText(this.translate('limitError'), this.options.maxItems.toString()));
                     return;
                 }
 
@@ -2130,7 +2086,7 @@ Ss_input.locale = {
                     return false;
                 });
             }).on('removeItemAction.ssi', function (e, data) {
-                if (!data.isFile(thisS.options.allowed))
+                if (!Ss_input.tools.isFile(data,thisS.options.allowed))
                     $(this).trigger('removeCollectionAction.ssi', [data.replace(thisS.options.rootPath, '')]);
             });
             return this;
@@ -2435,7 +2391,7 @@ Ss_input.locale = {
                     }
                 });
             }).on('silentSelectionAction.ssi', function (e, selectedInfo) {
-                if (!selectedInfo.displayImage.isFile(['jpg', 'png', 'jpeg'])) {
+                if (!Ss_input.tools.isFile(selectedInfo.displayImage,['jpg', 'png', 'jpeg'])) {
                     selectedInfo.displayImage = '';
                 }
             });
@@ -3072,7 +3028,7 @@ Ss_input.locale = {
              if (name && !ssi.readOnlyMode) {
                  var href = ssi.fileSystem.getPath(name);
                  if (ssi.getItemData('name', name)) {
-                     ssi.notify('error', this.translate('folderExistError').replaceText(name));
+                     ssi.notify('error', Ss_input.tools.replaceText(this.translate('folderExistError'),name));
                      return;
                  }
                  var callback = function () {
@@ -3159,7 +3115,7 @@ Ss_input.locale = {
             }
             var ext=Ss_input.tools.getExtension(name);
             if ($.inArray(ext,ssi.fileSystem.options.allowed)==-1) {
-                ssi.notify('error', this.translate('extError').replaceText(ext));
+                ssi.notify('error',  Ss_input.tools.replaceText(this.translate('extError'),ext));
                 return;
             }
             var callback = function () {
@@ -3236,7 +3192,7 @@ Ss_input.locale = {
             var ssi = this.ssi, thisS = this;
             this.modalOptions = $.extend({}, {
                 sizeClass: 'mediumToLarge',
-                content: '<input type="file" multiple id="ssi-upload" />',
+                content: '<input type="file" multiple id="ssi-upload" name="ssi-files"/>',
                 title: this.translate('uploadFiles'),
                 className: "ssi-uploadModal",
                 keepContent: true
@@ -3366,14 +3322,13 @@ Ss_input.locale = {
                     var regex = new RegExp(/^(data:)([\w\/\+]+);(charset=[\w-]+|base64).*,(.*)/gi);
                     ext = regex.exec(url)[2].split('/')[1]
                 }
-
             }
             if (!image && !dataUri) {
                 ssi.notify('error', thisS.translate('invalidUrlError'));
                 return false;
             }
             if ($.inArray(ext, ssi.fileSystem.options.allowed) < 0 && !dataUri) {
-                ssi.notify('error', thisS.translate('extError').replaceText(ext));
+                ssi.notify('error', Ss_input.tools.replaceText(thisS.translate('extError'), ext));
                 return false;
             }
             return (dataUri ? 'dataUrl' : true);
@@ -3424,7 +3379,7 @@ Ss_input.locale = {
         addNew: function () {
             var ssi = this.ssi, thisS = this;
             var content = this.database.getForm();
-            var topButtons = [{
+            var topButton = {
                 title: this.translate('saveAndNew'),
                 label: '<div class="icon ssi-saveIcon"></div>+',
                 method: function () {
@@ -3435,7 +3390,7 @@ Ss_input.locale = {
                         }
                     });
                 }
-            }];
+            };
             var modalOptions = {
                 content: content,
                 buttons: [{
@@ -3453,7 +3408,7 @@ Ss_input.locale = {
                     }
                 }]
             };
-            this.database.createWindow(modalOptions, topButtons);
+            this.database.createWindow(modalOptions, topButton);
         },
         save: function (callback) {
             var formData = this.database.getFormData();
@@ -4031,7 +3986,6 @@ Ss_input.locale = {
                         dataField=data[i][dataName];
                     }else{
                         dataField=Ss_input.tools.escapeHtml(data[i][dataName]);
-                        console.log(dataField);
                         if(dataField.split(' ').length>5){
                             dataField='<div class="ssi-longText">'+dataField+'</div>'
                         }
@@ -4404,7 +4358,7 @@ Ss_input.locale = {
                     sizeClass: 'small',
                     className:'ssi-confirmModal',
                     fixedHeight: false,
-                    content: thisS.translate('replaceMsg').replaceText(name),
+                    content: Ss_input.tools.replaceText(thisS.translate('replaceMsg'),name),
                     buttons: buttons
                 });
             }
@@ -4815,20 +4769,20 @@ Ss_input.locale = {
             var $element = ssi.get$mainElementById(url);
             var mainTable = $element.parents('.ssi-itemWrapper');
             var $target = mainTable.find('.ssi-itemName'),
-             value = Ss_input.tools.basename(url);
+                value = Ss_input.tools.basename(url);
             var $renameInput = $(Ss_input.tools.template(this.template, {
                 value: value,
                 okLabel: this.translate('ok'),
                 cancelLabel: this.translate('cancel')
             }));
             $renameInput.find('#ssi-renameCancel')
-             .click(function () {
-                 $renameInput.remove();
-                 $target.show();
-                 return false;
-             });
+                .click(function () {
+                    $renameInput.remove();
+                    $target.show();
+                    return false;
+                });
             var $confirmButton = $renameInput.find('#ssi-renameConfirm'),
-             $input = $renameInput.find('#ssi-renameInput');
+                $input = $renameInput.find('#ssi-renameInput');
             $target.after($renameInput).hide();
             $input.focus().click(function () {
                 return false;
@@ -4838,42 +4792,42 @@ Ss_input.locale = {
                 var newExtension = '';
                 if (newName != "" && newName !== value) {
                     if (ssi.getItemData('name', newName)) {
-                        ssi.notify('error', thisS.translate('existError').replaceText(newName));
+                        ssi.notify('error', Ss_input.tools.replaceText(thisS.translate('existError'), newName));
                         return;
                     }
                     var cachedItem = ssi.getItemData('name', value);
                     if (cachedItem.type !== 'zzzzfolder') {
                         newExtension = Ss_input.tools.getExtension(newName);
                         if ($.inArray(newExtension.toLowerCase(), ssi.fileSystem.options.allowed) === -1) {
-                            ssi.notify('error', thisS.translate('extError').replaceText(newExtension));
+                            ssi.notify('error', Ss_input.tools.replaceText(thisS.translate('extError'), newExtension));
                             return;
                         }
                     }
                     var oldPath = fileSystem.getPath(value),
-                     newPath = fileSystem.getPath(newName),
-                     callback = function (data) {
-                         $element.attr('data-ID', newPath);
-                         $target.text(newName);
-                         $renameInput.remove();
-                         $target.show();
-                         var elementInfo=$element.data('info');
-                         elementInfo.name=newName;
-                         elementInfo.path=Ss_input.tools.urlUnion(ssi.currentCollection.id, newPath);
-                         var cache = ssi.plugins['cache'];
-                         if (cache) {
-                             var historyCache = cache.getCache();
-                             cachedItem = cache.getCachedItem('name', value,'',historyCache);
-                             if (cachedItem) {
-                                 cachedItem.name = newName;
-                                 cachedItem.path = elementInfo.path;
-                             }
-                             cache.setCache(historyCache);
-                         }
-                         var sideBar = ssi.plugins['sidebar'];
-                         if (!oldPath.isFile(ssi.fileSystem.options.allowed) && sideBar) {
-                             sideBar.editTreeLink(oldPath, newPath, newName, newPath);
-                         }
-                     };
+                        newPath = fileSystem.getPath(newName),
+                        callback = function (data) {
+                            $element.attr('data-ID', newPath);
+                            $target.text(newName);
+                            $renameInput.remove();
+                            $target.show();
+                            var elementInfo = $element.data('info');
+                            elementInfo.name = newName;
+                            elementInfo.path = Ss_input.tools.urlUnion(ssi.currentCollection.id, newPath);
+                            var cache = ssi.plugins['cache'];
+                            if (cache) {
+                                var historyCache = cache.getCache();
+                                cachedItem = cache.getCachedItem('name', value, '', historyCache);
+                                if (cachedItem) {
+                                    cachedItem.name = newName;
+                                    cachedItem.path = elementInfo.path;
+                                }
+                                cache.setCache(historyCache);
+                            }
+                            var sideBar = ssi.plugins['sidebar'];
+                            if (!Ss_input.tools.isFile(oldPath, ssi.fileSystem.options.allowed) && sideBar) {
+                                sideBar.editTreeLink(oldPath, newPath, newName, newPath);
+                            }
+                        };
                     var data = $.extend({}, thisS.options.data, {
                         'newUrl': newPath,
                         'oldUrl': oldPath
@@ -4930,7 +4884,7 @@ Ss_input.locale = {
                 content.append('<input type="hidden" class="ssi-inputField" name="' + this.database.id + '" value="' + data[this.database.currentCollection.id] + '">');
             }
             if (ssi.checkPermissions('write', 'saveAsNew'))
-                var topButtons = [{
+                var topButton = {
                     title: this.translate('saveAsNew'),
                     label: '<div class="icon ssi-saveIcon"></div>+',
                     method: function () {
@@ -4944,7 +4898,7 @@ Ss_input.locale = {
                             type: 'POST'
                         });
                     }
-                }];
+                };
             var modalOptions = {
                 content: content[0].outerHTML,
                 buttons: [{
@@ -4965,7 +4919,7 @@ Ss_input.locale = {
                 }]
             };
 
-            this.database.createWindow(modalOptions, topButtons);
+            this.database.createWindow(modalOptions, topButton);
         },
         save: function (id, callback, options) {
             var formData = this.database.getFormData();
@@ -5663,6 +5617,31 @@ Ss_input.locale = {
     })
 })(jQuery);
 (function ($) {
+    Ss_input.plugins['test'] = Ss_input.Plugin.extend({
+        init: function () {
+            this.options.translateFields = this.options.translateFields || this.ssi.options.translateFields;
+            this.$content = '';
+            this.setButtons();
+        },
+        setButtons: function () {
+            var ssi = this.ssi;
+            var thisS = this;
+            ssi.addButton({
+                label: '<div class="icon ssi-imgBoxIcon"></div>',
+                id: '',
+                stopPropagation: false,
+                className: 'ssi-imgBox'
+            }, 'itemButton', false);
+        },
+        getFilesInfo: function () {
+            var ssi = this.ssi,
+                dataList = ssi.getSelectedData();
+            console.log(dataList[0]._id);
+        }
+    })
+})(jQuery);
+
+(function ($) {
     Ss_input.fileSystem['download'] = Ss_input.Plugin.extend({
         init: function () {
             this.setButtons();
@@ -5696,30 +5675,6 @@ Ss_input.locale = {
     });
 })(jQuery);
 (function ($) {
-    Ss_input.fileSystemHandlers['delete'] = Ss_input.Handler.extend({
-        init: function () {
-            this.defaults = {
-                stringifyData: true,
-                sendId: 'inForm',
-                ajaxOptions: {url: this.storage.options.scriptsPath + '/deletedirAction.php'}
-            };
-            this.setEvents();
-        },
-        setEvents: function () {
-            var ssi = this.ssi, thisS = this;
-            this.ssi.$element.on('removeItemAction.ssi', function (e, id) {
-                if (!id.isFile(ssi.fileSystem.options.allowed)) {
-                    thisS.ssi.$element.trigger('removeCollectionAction.ssi', [id.replace(ssi.fileSystem.options.rootPath, '')]);
-                    var sideBar = ssi.plugins['sidebar'];
-                    if (sideBar) {
-                        sideBar.deleteTree(id);
-                    }
-                }
-            })
-        }
-    })
-})(jQuery);
-(function ($) {
     Ss_input.fileSystemHandlers['imgBox'] = Ss_input.Handler.extend({
         defaults: {
             excludeItems: 'condition:(field:(mimeType).split("/")[0]!="image")',
@@ -5734,17 +5689,6 @@ Ss_input.locale = {
             includeFields: [],
             excludeItems: 'condition:(field:(mimeType)=="directory")',
             translateFields: true
-        }
-    })
-})(jQuery);
-(function ($) {
-    Ss_input.fileSystemHandlers['scan'] = Ss_input.Handler.extend({
-        group: 'fileSystem',
-        defaults: {
-            titleField:'name',
-            idField: 'path',
-            displayImage: 'condition:(field:(mimeType).split("/")[0]=="image"? field:(path):"")',
-            itemClass: 'condition:(field:(mimeType).split("/")[0]=="image"||field:(mimeType).split("/")[0]=="directory"?field:(mimeType).split("/")[0]:"ssi-empty")'
         }
     })
 })(jQuery);
@@ -5929,6 +5873,41 @@ Ss_input.locale = {
                 this.ssi.plugins['scan'].appendItems(ssi_uploadedFiles);
             ssi_uploadedFiles = [];
             this.ssi.$element.trigger('resetAction');
+        }
+    })
+})(jQuery);
+(function ($) {
+    Ss_input.fileSystemHandlers['scan'] = Ss_input.Handler.extend({
+        group: 'fileSystem',
+        defaults: {
+            titleField:'name',
+            idField: 'path',
+            displayImage: 'condition:(field:(mimeType).split("/")[0]=="image"? field:(path):"")',
+            itemClass: 'condition:(field:(mimeType).split("/")[0]=="image"||field:(mimeType).split("/")[0]=="directory"?field:(mimeType).split("/")[0]:field:(mimeType).split("/")[0]+" ssi-empty")'
+        }
+    })
+})(jQuery);
+(function ($) {
+    Ss_input.fileSystemHandlers['delete'] = Ss_input.Handler.extend({
+        init: function () {
+            this.defaults = {
+                stringifyData: true,
+                sendId: 'inForm',
+                ajaxOptions: {url: this.storage.options.scriptsPath + '/deletedirAction.php'}
+            };
+            this.setEvents();
+        },
+        setEvents: function () {
+            var ssi = this.ssi, thisS = this;
+            this.ssi.$element.on('removeItemAction.ssi', function (e, id) {
+                if (!Ss_input.tools.isFile(id,ssi.fileSystem.options.allowed)) {
+                    thisS.ssi.$element.trigger('removeCollectionAction.ssi', [id.replace(ssi.fileSystem.options.rootPath, '')]);
+                    var sideBar = ssi.plugins['sidebar'];
+                    if (sideBar) {
+                        sideBar.deleteTree(id);
+                    }
+                }
+            })
         }
     })
 })(jQuery);

@@ -76,8 +76,8 @@
 <script src="ss-input/js/core/Input.js"></script>
 <script src="ss-input/js/core/Plugin.js"></script>
 <script src="ss-input/js/core/templates.js"></script>
-<script src="ss-input/js/core/tools.js"></script>
 <script src="ss-input/js/core/locale.js"></script>
+<script src="ss-input/js/core/tools.js"></script>
 <script src="ss-input/js/plugins/selectionMode/selectionMode.js"></script>
 <script src="ss-input/js/plugins/selectionMode/multiSelection.js"></script>
 <script src="ss-input/js/plugins/selectionMode/singleSelection.js"></script>
@@ -112,17 +112,18 @@
 <script src="ss-input/js/plugins/nameBubble.js"></script>
 <script src="ss-input/js/plugins/contextMenu.js"></script>
 <script src="ss-input/js/plugins/select.js"></script>
+<script src="ss-input/js/plugins/test.js"></script>
 <script src="ss-input/js/plugins/fileSystem/download.js"></script>
-<script src="ss-input/js/plugins/fileSystem/handlers/deleteHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/imgBoxHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/infoBubbleHandler.js"></script>
-<script src="ss-input/js/plugins/fileSystem/handlers/scanHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/searchHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/selectAllHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/selectionHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/sidebarHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/sortHandler.js"></script>
 <script src="ss-input/js/plugins/fileSystem/handlers/uploadHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/scanHandler.js"></script>
+<script src="ss-input/js/plugins/fileSystem/handlers/deleteHandler.js"></script>
 <!-- endinject -->
 <script>
     $(document).ready(function () {
@@ -302,6 +303,7 @@
             selection: {
                 selectionMode: 'multiSelection',
                 modeOptions: {
+                    duplicate: false,
                     content: '.ssi-multi3',
                     template:'boxes'
                 },

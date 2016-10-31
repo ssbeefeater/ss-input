@@ -51,20 +51,20 @@
             var $element = ssi.get$mainElementById(url);
             var mainTable = $element.parents('.ssi-itemWrapper');
             var $target = mainTable.find('.ssi-itemName'),
-             value = Ss_input.tools.basename(url);
+                value = Ss_input.tools.basename(url);
             var $renameInput = $(Ss_input.tools.template(this.template, {
                 value: value,
                 okLabel: this.translate('ok'),
                 cancelLabel: this.translate('cancel')
             }));
             $renameInput.find('#ssi-renameCancel')
-             .click(function () {
-                 $renameInput.remove();
-                 $target.show();
-                 return false;
-             });
+                .click(function () {
+                    $renameInput.remove();
+                    $target.show();
+                    return false;
+                });
             var $confirmButton = $renameInput.find('#ssi-renameConfirm'),
-             $input = $renameInput.find('#ssi-renameInput');
+                $input = $renameInput.find('#ssi-renameInput');
             $target.after($renameInput).hide();
             $input.focus().click(function () {
                 return false;
@@ -74,42 +74,42 @@
                 var newExtension = '';
                 if (newName != "" && newName !== value) {
                     if (ssi.getItemData('name', newName)) {
-                        ssi.notify('error', thisS.translate('existError').replaceText(newName));
+                        ssi.notify('error', Ss_input.tools.replaceText(thisS.translate('existError'), newName));
                         return;
                     }
                     var cachedItem = ssi.getItemData('name', value);
                     if (cachedItem.type !== 'zzzzfolder') {
                         newExtension = Ss_input.tools.getExtension(newName);
                         if ($.inArray(newExtension.toLowerCase(), ssi.fileSystem.options.allowed) === -1) {
-                            ssi.notify('error', thisS.translate('extError').replaceText(newExtension));
+                            ssi.notify('error', Ss_input.tools.replaceText(thisS.translate('extError'), newExtension));
                             return;
                         }
                     }
                     var oldPath = fileSystem.getPath(value),
-                     newPath = fileSystem.getPath(newName),
-                     callback = function (data) {
-                         $element.attr('data-ID', newPath);
-                         $target.text(newName);
-                         $renameInput.remove();
-                         $target.show();
-                         var elementInfo=$element.data('info');
-                         elementInfo.name=newName;
-                         elementInfo.path=Ss_input.tools.urlUnion(ssi.currentCollection.id, newPath);
-                         var cache = ssi.plugins['cache'];
-                         if (cache) {
-                             var historyCache = cache.getCache();
-                             cachedItem = cache.getCachedItem('name', value,'',historyCache);
-                             if (cachedItem) {
-                                 cachedItem.name = newName;
-                                 cachedItem.path = elementInfo.path;
-                             }
-                             cache.setCache(historyCache);
-                         }
-                         var sideBar = ssi.plugins['sidebar'];
-                         if (!oldPath.isFile(ssi.fileSystem.options.allowed) && sideBar) {
-                             sideBar.editTreeLink(oldPath, newPath, newName, newPath);
-                         }
-                     };
+                        newPath = fileSystem.getPath(newName),
+                        callback = function (data) {
+                            $element.attr('data-ID', newPath);
+                            $target.text(newName);
+                            $renameInput.remove();
+                            $target.show();
+                            var elementInfo = $element.data('info');
+                            elementInfo.name = newName;
+                            elementInfo.path = Ss_input.tools.urlUnion(ssi.currentCollection.id, newPath);
+                            var cache = ssi.plugins['cache'];
+                            if (cache) {
+                                var historyCache = cache.getCache();
+                                cachedItem = cache.getCachedItem('name', value, '', historyCache);
+                                if (cachedItem) {
+                                    cachedItem.name = newName;
+                                    cachedItem.path = elementInfo.path;
+                                }
+                                cache.setCache(historyCache);
+                            }
+                            var sideBar = ssi.plugins['sidebar'];
+                            if (!Ss_input.tools.isFile(oldPath, ssi.fileSystem.options.allowed) && sideBar) {
+                                sideBar.editTreeLink(oldPath, newPath, newName, newPath);
+                            }
+                        };
                     var data = $.extend({}, thisS.options.data, {
                         'newUrl': newPath,
                         'oldUrl': oldPath

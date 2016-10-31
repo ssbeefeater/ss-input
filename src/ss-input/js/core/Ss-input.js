@@ -1,7 +1,7 @@
 (function ($, ssi_modal) {
 
     var ssi_buttons = {},
-     index = 0;
+        index = 0;
     this.Ss_input = function (element, option) {
         var defaults = {
             plugins: [],
@@ -76,7 +76,7 @@
 
         }
         if (this.options.showTo === 'modalWindow') {
-            this.setModal();
+            setModal(this);
         } else {
             var $showTo = $(this.options.showTo);
             if (!$showTo.is('div')) {
@@ -84,90 +84,36 @@
                 return;
             }
             thisS.$element.trigger('earlyShowAction');
-            var content = thisS.setContent();
+            var content = setContent(thisS);
             if (!content) {
                 return;
             }
             $showTo.first().addClass('ssi-mainModal').html(content);
-            thisS.setHeight();
+            setHeight(null, thisS);
         }
     };
-    Ss_input.prototype.setModal = function () {
-        var thisS = this;
-        $.extend(this.options.modalOptions, {
+    var setModal = function (thisS) {
+        $.extend(thisS.options.modalOptions, {
             className: "ssi-mainModal",
             onClose: function () {
                 thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi');
             }
         });
-        this.$element.on('click', function (e) {
+        thisS.$element.on('click', function (e) {
             e.preventDefault();
             thisS.$element.trigger('earlyShowAction');
             var $eTarget = $(e.target);
             if ($eTarget.hasClass('ss-input')) {
                 var modal = thisS.createWindow(thisS.options.modalOptions);
-                var content = thisS.setContent();
+                var content = setContent(thisS);
                 if (!content) {
                     modal.close();
                     return;
                 }
                 modal.setContent(content);
-                thisS.setHeight();
+                setHeight(null, thisS);
             }
         });
-    };
-    Ss_input.prototype.setAfterEvents = function () {
-        var optionsDiv, thisS = this;
-        $(window).bind('beforeunload', function () {
-            thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi').off('.ssi');
-        });
-
-        this.$content.on({
-            'mouseenter.ssi': function (e) {
-                e.preventDefault();
-                optionsDiv = $(this).find('.ssi-optionsDiv');
-                optionsDiv.fadeIn(200);//slideDown(100);
-            },
-            'mouseleave.ssi': function () {
-                if (optionsDiv.hasClass('selected') === false) {
-                    optionsDiv.fadeOut(200);//.slideUp(100);
-                }
-            }
-        }, '.ssi-displayDiv');
-        this.$element.on('closeAction.ssi', function () {
-            ssi_modal.removeAll();
-            thisS.currentCollection = {};
-            thisS.initializedButtons = [];
-            thisS.readOnlyMode = '';
-            $(this).off('.ssi');
-            $('body').off('.ssi');
-        });
-        this.$content.on('click', function (e) {
-            if (!$(e.target).is('input'))$(this).focus();
-        });
-
-    };
-    Ss_input.prototype.setContent = function () {
-        var checkPlugin = Ss_input.tools.keyExists(this.requireAfter, Ss_input.plugins);
-        var requirePending = Ss_input.tools.arrayValuesInArray(this.requireAfter, this.pluginNames);
-        this.pluginNames = this.pluginNames.concat(requirePending);
-        if (checkPlugin.length != 0) {
-            console.log('Some requirements are missing: ' + checkPlugin.toString());
-            return false;
-        }
-        this.$content = $(Ss_input.templates.mainContent);
-        if (this.options.showTo !== 'modalWindow') {
-            this.$content.append(Ss_input.templates.bottomButtons)
-        }
-        if ($.isEmptyObject(this.plugins)) {
-            this.pluginInit(this.pluginNames);
-        } else {
-            this.resetPlugins(this.plugins);
-        }
-        this.$element.trigger('showAction');
-        this.buttonsInit();
-        this.setAfterEvents();
-        return this.$content;
     };
     Ss_input.prototype.destroy = function () {
         this.$element.trigger('closeAction.ssi');
@@ -175,9 +121,6 @@
     };
     Ss_input.prototype.checkPermissions = function (permissions, name) {
         return ((permissions === 'read' || this.options.permissions[0] === 'all' || Ss_input.tools.arrayValuesInArray(permissions, this.options.permissions).length === 0 || $.inArray(name, this.options.permissions) !== -1) && ($.inArray(name, this.options.excludePlugin) === -1 || $.inArray(name, this.require) !== -1 || $.inArray(name, this.requireAfter) !== -1));
-    };
-    Ss_input.prototype.handlerInit = function (handler, plugin, handlersGroup) {
-        new Ss_input[handlersGroup][handler](this, plugin, handler);
     };
     Ss_input.prototype.pluginInit = function (plugins, pluginGroup) {
         plugins = Ss_input.tools.toArray(plugins);
@@ -201,9 +144,9 @@
                     if (Ss_input.tools.keyExists(notInitialized, this.plugins).length === 0 || Ss_input.tools.keyExists(notInitialized, this.corePlugins).length === 0) {
                         this[plugin.type][plugins[i]] = plugin;
                         if (Ss_input[this.handlersGroup].hasOwnProperty(plugins[i])) {
-                            this.handlerInit(plugins[i], plugin, this.handlersGroup);
+                            handlerInit(plugins[i], plugin, this.handlersGroup, this);
                         } else if (Ss_input.handlers.hasOwnProperty(plugins[i])) {
-                            this.handlerInit(plugins[i], plugin, 'handlers');
+                            handlerInit(plugins[i], plugin, 'handlers', this);
                         }
                         plugin.init();
                     } else {
@@ -222,117 +165,54 @@
         for (var pluginName in pluginGroup) {
             var plugin = pluginGroup[pluginName];
             if (Ss_input[this.handlersGroup].hasOwnProperty(pluginName)) {
-                this.handlerInit(pluginName, plugin, this.handlersGroup);
+                handlerInit(pluginName, plugin, this.handlersGroup, this);
             } else if (Ss_input.handlers.hasOwnProperty(pluginName)) {
-                this.handlerInit(pluginName, plugin, 'handlers');
+                handlerInit(pluginName, plugin, 'handlers', this);
             }
             plugin.init();
         }
     };
-    Ss_input.prototype.coreButtonsInit = function (type) {
-        switch (Ss_input.tools.findKey(type, this.buttonSelectors)) {
-            case 'contextMenu':
-                break;
-            case 'actions':
-                this.$content.find(this.buttonSelectors['menu']).append(this.addButton({
-                    id: 'ssi-actionsBtn',
-                    title: this.language.actions,
-                    label: '<div class="icon ssi-actionsIcon"></div>',
-                    dropDown: true,
-                    selectionRequired: true
-                }, 'menuButton', false));
-                break;
-            case 'options':
-                this.$content.find(this.buttonSelectors['menu']).append(this.addButton({
-                    id: 'ssi-TasksBtn',
-                    title: this.language.options,
-                    label: '<div class="icon ssi-optionsIcon"></div>',
-                    dropDown: true
-                }, 'menuButton', false));
-                break;
-            case 'openWith':
-                this.$content.find(this.buttonSelectors['contextMenu']).append(this.addButton({
-                    id: 'ssi-openWithBtn',
-                    title: this.language.openWith,
-                    label: '<span class="icon ssi-openWithIcon"></span>'+this.language.openWith,
-                    selectionRequired: true,
-                    subMenu: true
-                }, 'listButton', false));
-                break;
-            case 'editWith':
-                this.$content.find(this.buttonSelectors['contextMenu']).append(this.addButton({
-                    id: 'ssi-editWithBtn',
-                    title: 'editWith', //this.language.openWith,
-                    label: '<span class="icon ssi-editWithIcon"></span>editWith',
-                    subMenu: true,
-                    selectionRequired: true
-                }, 'listButton', false));
-                break;
-        }
-    };
-    Ss_input.prototype.buttonsInit = function () {
-
-        var selectorList = this.buttonSelectors;
-        this.$content.find(selectorList['menu']).append(ssi_buttons[selectorList['menu']]);
-        delete  ssi_buttons[selectorList['menu']];
-        for (var selector in ssi_buttons) {
-            try {
-                var selectors = selector.split(','), toInitialize;
-                if ((toInitialize = Ss_input.tools.keyExists(selectors, this.initializedButtons)).length != 0) {
-                    for (var i = 0, length = toInitialize.length; i < length; i++) {
-                        this.initializedButtons[toInitialize[i]] = true;
-                        this.coreButtonsInit(toInitialize[i]);
-                    }
-                }
-                this.$content.find(selector).append(ssi_buttons[selector]);
-            } catch (err) {
-//removeIf(production)
-                console.log(err);
-//endRemoveIf(production)
-            }
-        }
-        ssi_buttons = {};
-    };
     Ss_input.prototype.addButton = function (buttonOptions, type, appendTo, excludeItem) {
-        buttonOptions = Ss_input.tools.toArray(buttonOptions);
+        var validButtons = {
+            "menuButton": ['menu', 'bottom'],
+            "listButton": ['options', 'actions', 'contextMenu', 'openWith', 'editWith'],
+            "itemButton": []
+        };
         type = type || 'menuButton';
-        var buttons = [];
-        for (var y = 0, optionsLength = buttonOptions.length; y < optionsLength; y++) {
-            if (appendTo == 'bottom' && this.options.showTo === 'modalWindow') {
-                this.options.modalOptions.buttons.push(buttonOptions[y]);
-                continue;
-            }
-            var $btn = new Ss_input.Button(buttonOptions[y], type, this.$content);
-            if (appendTo) {
-                if (appendTo instanceof $) {
-                    appendTo.append($btn);
-                } else {
-                    if (appendTo != 'itemButton') {
-                        var ButtonWrapper = [];
-                        for (var i = 0, length = appendTo.length; i < length; i++) {
+        if (appendTo == 'bottom' && this.options.showTo === 'modalWindow') {
+            this.options.modalOptions.buttons.push(buttonOptions);
+            return;
+        }
+        var $btn = new Ss_input.Button(buttonOptions, type, this.$content);
+        if (appendTo) {
+            if (appendTo instanceof $) {
+                appendTo.append($btn);
+            } else {
+                if (type != 'itemButton') {
+                    var ButtonWrapper = [];
+                    for (var i = 0, length = appendTo.length; i < length; i++) {
+                        if ($.inArray(appendTo[i], validButtons[type]) !== -1)
                             ButtonWrapper.push(this.buttonSelectors[appendTo[i]]);
-                        }
-                        if (ssi_buttons.hasOwnProperty(ButtonWrapper.toString())) {
-                            ssi_buttons[ButtonWrapper.toString()].push($btn);
-                        } else {
-                            ssi_buttons[ButtonWrapper.toString()] = [$btn];
-                        }
-                        if (excludeItem && buttonOptions[y].selectionRequired) {
-                            this.ssi_excludeList[buttonOptions[y].className] = excludeItem;
-                        }
+                    }
+                    if (ssi_buttons.hasOwnProperty(ButtonWrapper.toString())) {
+                        ssi_buttons[ButtonWrapper.toString()].push($btn);
+                    } else {
+                        ssi_buttons[ButtonWrapper.toString()] = [$btn];
+                    }
+                    if (excludeItem && buttonOptions.selectionRequired) {
+                        this.ssi_excludeList[buttonOptions.className] = excludeItem;
                     }
                 }
             }
-            buttons.push($btn);
         }
-        return buttons.length == 1 ? buttons[0] : buttons;
+        return $btn;
     };
     Ss_input.prototype.notify = function (type, msg) {
         ssi_modal.notify(type, {overrideOther: true, content: msg})
     };
     Ss_input.prototype.checkExcludedButtons = function (onHide) {
         var excludeList = this.ssi_excludeList,
-         selected = this.get$selectedItems();
+            selected = this.get$selectedItems();
         var $mustSelect = this.$content.find('.ssi-mustSelect').removeClass('ssi-hidden disabled');
         for (var className in excludeList) {
             selected.each(function () {
@@ -427,7 +307,7 @@
                 itemList.push($(this).data('info'))
             });
         }
-        return itemList;
+        return itemList || [];
     };
     Ss_input.prototype.getItemData = function (key, value, path) {
         return Ss_input.tools.findByKey(this.getPageData(path), key, value);
@@ -456,9 +336,9 @@
                 if (e.lengthComputable) {
                     var percentComplete = e.loaded / e.total;
                     $progressBar
-                     .css({
-                         width: percentComplete * 100 + '%'
-                     });
+                        .css({
+                            width: percentComplete * 100 + '%'
+                        });
                 } else {
                     $progressBar.css('width', '100%');
                 }
@@ -474,7 +354,6 @@
                 thisS.$content.find('#ssi-loader').removeClass('ssi-hidden');
                 $progressBar.removeClass('ssi-hidden');
             }
-
         };
         options = $.extend({}, defaults, options);
         if (options.stringifyData) {
@@ -495,7 +374,6 @@
             <!--removeIf(production)-->
             /*
              <!--endRemoveIf(production)-->
-
              try {
              <!--removeIf(production)-->
              */
@@ -541,7 +419,6 @@
              <!--removeIf(production)-->
              */
             <!--endRemoveIf(production)-->
-
         }).fail(function (request, error) {
             if (catchError)
                 catchError();
@@ -550,11 +427,6 @@
         }).complete(function () {
             thisS.reloadProgressbar();
         })
-    };
-    Ss_input.prototype.setHeight = function (offset) {
-        offset = offset || (this.$content.hasClass('ssi-multiPickMode') && this.options.showTo != 'modalWindow' ? 115 : 70);
-        var height = parseInt(this.$content.parent().height()) - offset;
-        this.$content.find('#ssi-mainContent').css('height', height);
     };
     Ss_input.prototype.openCollection = function (id, url, data) {
         this.$element.trigger('changeCollectionAction.ssi');
@@ -566,10 +438,140 @@
         setTimeout(function () {
             thisS.$content.find('#ssi-loader').addClass('ssi-hidden');
             thisS.$content.find('#ssi-progressBar')
-             .addClass('ssi-hidden')
-             .css('width', 0 + '%');
+                .addClass('ssi-hidden')
+                .css('width', 0 + '%');
         }, 500);
     };
+    function handlerInit(handler, plugin, handlersGroup, thisS) {
+        new Ss_input[handlersGroup][handler](thisS, plugin, handler);
+    }
+
+    function setAfterEvents(thisS) {
+        var optionsDiv;
+        $(window).bind('beforeunload', function () {
+            thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi').off('.ssi');
+        });
+
+        thisS.$content.on({
+            'mouseenter.ssi': function (e) {
+                e.preventDefault();
+                optionsDiv = $(this).find('.ssi-optionsDiv');
+                optionsDiv.fadeIn(200);//slideDown(100);
+            },
+            'mouseleave.ssi': function () {
+                if (optionsDiv.hasClass('selected') === false) {
+                    optionsDiv.fadeOut(200);//.slideUp(100);
+                }
+            }
+        }, '.ssi-displayDiv');
+        thisS.$element.on('closeAction.ssi', function () {
+            ssi_modal.removeAll();
+            thisS.currentCollection = {};
+            thisS.initializedButtons = [];
+            thisS.readOnlyMode = '';
+            $(this).off('.ssi');
+            $('body').off('.ssi');
+        });
+        thisS.$content.on('click', function (e) {
+            if (!$(e.target).is('input'))$(this).focus();
+        });
+
+    }
+
+    function setContent(thisS) {
+        var checkPlugin = Ss_input.tools.keyExists(thisS.requireAfter, Ss_input.plugins);
+        var requirePending = Ss_input.tools.arrayValuesInArray(thisS.requireAfter, thisS.pluginNames);
+        thisS.pluginNames = thisS.pluginNames.concat(requirePending);
+        if (checkPlugin.length != 0) {
+            console.log('Some requirements are missing: ' + checkPlugin.toString());
+            return false;
+        }
+        thisS.$content = $(Ss_input.templates.mainContent);
+        if (thisS.options.showTo !== 'modalWindow') {
+            thisS.$content.append(Ss_input.templates.bottomButtons)
+        }
+        if ($.isEmptyObject(thisS.plugins)) {
+            thisS.pluginInit(thisS.pluginNames);
+        } else {
+            thisS.resetPlugins(thisS.plugins);
+        }
+        thisS.$element.trigger('showAction');
+        buttonsInit(thisS);
+        setAfterEvents(thisS);
+        return thisS.$content;
+    }
+
+    function coreButtonsInit(type, thisS) {
+        switch (Ss_input.tools.findKey(type, thisS.buttonSelectors)) {
+            case 'contextMenu':
+                break;
+            case 'actions':
+                thisS.$content.find(thisS.buttonSelectors['menu']).append(thisS.addButton({
+                    id: 'ssi-actionsBtn',
+                    title: thisS.language.actions,
+                    label: '<div class="icon ssi-actionsIcon"></div>',
+                    dropDown: true,
+                    selectionRequired: true
+                }, 'menuButton', false));
+                break;
+            case 'options':
+                thisS.$content.find(thisS.buttonSelectors['menu']).append(thisS.addButton({
+                    id: 'ssi-TasksBtn',
+                    title: thisS.language.options,
+                    label: '<div class="icon ssi-optionsIcon"></div>',
+                    dropDown: true
+                }, 'menuButton', false));
+                break;
+            case 'openWith':
+                thisS.$content.find(thisS.buttonSelectors['contextMenu']).append(thisS.addButton({
+                    id: 'ssi-openWithBtn',
+                    title: thisS.language.openWith,
+                    label: '<span class="icon ssi-openWithIcon"></span>' + thisS.language.openWith,
+                    selectionRequired: true,
+                    subMenu: true
+                }, 'listButton', false));
+                break;
+            case 'editWith':
+                thisS.$content.find(thisS.buttonSelectors['contextMenu']).append(thisS.addButton({
+                    id: 'ssi-editWithBtn',
+                    title: 'editWith', //thisS.language.openWith,
+                    label: '<span class="icon ssi-editWithIcon"></span>editWith',
+                    subMenu: true,
+                    selectionRequired: true
+                }, 'listButton', false));
+                break;
+        }
+    }
+
+    function buttonsInit(thisS) {
+        var selectorList = thisS.buttonSelectors;
+        thisS.$content.find(selectorList['menu']).append(ssi_buttons[selectorList['menu']]);
+        delete  ssi_buttons[selectorList['menu']];
+        for (var selector in ssi_buttons) {
+            try {
+                var selectors = selector.split(','), toInitialize;
+                if ((toInitialize = Ss_input.tools.keyExists(selectors, thisS.initializedButtons)).length != 0) {
+                    for (var i = 0, length = toInitialize.length; i < length; i++) {
+                        thisS.initializedButtons[toInitialize[i]] = true;
+                        coreButtonsInit(toInitialize[i], thisS);
+                    }
+                }
+                thisS.$content.find(selector).append(ssi_buttons[selector]);
+            } catch (err) {
+//removeIf(production)
+                console.log(err);
+//endRemoveIf(production)
+            }
+        }
+        ssi_buttons = {};
+    }
+
+    function setHeight(offset, thisS) {
+        offset = offset || (thisS.$content.hasClass('ssi-multiPickMode') && thisS.options.showTo != 'modalWindow' ? 115 : 70);
+        var height = parseInt(thisS.$content.parent().height()) - offset;
+        thisS.$content.find('#ssi-mainContent').css('height', height);
+    }
+
     $.fn.ss_input = function (opts) {
         return this.each(function () {
             new Ss_input(this, opts)

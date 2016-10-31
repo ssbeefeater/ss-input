@@ -25,7 +25,7 @@
         addNew: function () {
             var ssi = this.ssi, thisS = this;
             var content = this.database.getForm();
-            var topButtons = [{
+            var topButton = {
                 title: this.translate('saveAndNew'),
                 label: '<div class="icon ssi-saveIcon"></div>+',
                 method: function () {
@@ -36,7 +36,7 @@
                         }
                     });
                 }
-            }];
+            };
             var modalOptions = {
                 content: content,
                 buttons: [{
@@ -54,7 +54,7 @@
                     }
                 }]
             };
-            this.database.createWindow(modalOptions, topButtons);
+            this.database.createWindow(modalOptions, topButton);
         },
         save: function (callback) {
             var formData = this.database.getFormData();

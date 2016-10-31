@@ -70,7 +70,7 @@
                     }
                 });
             }).on('silentSelectionAction.ssi', function (e, selectedInfo) {
-                if (!selectedInfo.displayImage.isFile(['jpg', 'png', 'jpeg'])) {
+                if (!Ss_input.tools.isFile(selectedInfo.displayImage,['jpg', 'png', 'jpeg'])) {
                     selectedInfo.displayImage = '';
                 }
             });

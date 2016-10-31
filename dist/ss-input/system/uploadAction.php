@@ -9,7 +9,7 @@ try {
     if(!file_exists($path)){
         throw new Exception($translation["destFolderError"]);
     }
-    foreach ($_FILES ['files'] ['name'] as $pos => $name) {
+    $name=$_FILES ['ssi-files'] ['name'];
         $ext = pathinfo($name, PATHINFO_EXTENSION);
         if (substr($path, strlen($path) - 1, 1) != '/') {
             $path .= '/';
@@ -18,13 +18,12 @@ try {
         if (file_exists($path)) {
             throw new Exception('Exist');
         } else {
-            if (!move_uploaded_file($_FILES ['files'] ['tmp_name'][$pos], $path)) {
+            if (!move_uploaded_file($_FILES ['ssi-files'] ['tmp_name'], $path)) {
                 $errors = error_get_last();
                 throw new ErrorException($errors ['message']);
             }
             touch($path,time());
         }
-    }
     echo json_encode(array(
         'type' => 'success',
         'msg' => $translation["success"]

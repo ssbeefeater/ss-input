@@ -10,7 +10,7 @@
     Ss_input.tools = {
         dirname: function (path) {
             return path.replace(/\\/g, '/')
-             .replace(/\/[^\/]*\/?$/, '');
+                .replace(/\/[^\/]*\/?$/, '');
         },
         getExtension: function (file) {
             return file.split('.').pop().toLowerCase();
@@ -27,16 +27,16 @@
             var err = "";
             try {
                 var strFunc =
-                 "var p=[],print=function(){p.push.apply(p,arguments);};" +
-                 "with(obj){p.push('" +
-                 str.replace(/[\r\t\n]/g, " ")
-                  .replace(/'(?=[^#]*#>)/g, "\t")
-                  .split("'").join("\\'")
-                  .split("\t").join("'")
-                  .replace(/<#=(.+?)#>/g, "',$1,'")
-                  .split("<#").join("');")
-                  .split("#>").join("p.push('")
-                 + "');}return p.join('');";
+                    "var p=[],print=function(){p.push.apply(p,arguments);};" +
+                    "with(obj){p.push('" +
+                    str.replace(/[\r\t\n]/g, " ")
+                        .replace(/'(?=[^#]*#>)/g, "\t")
+                        .split("'").join("\\'")
+                        .split("\t").join("'")
+                        .replace(/<#=(.+?)#>/g, "',$1,'")
+                        .split("<#").join("');")
+                        .split("#>").join("p.push('")
+                    + "');}return p.join('');";
                 var func = new Function("obj", strFunc);
                 return func(data);
             } catch (e) {
@@ -46,17 +46,9 @@
             }
 
         },
-
         dataReplace: function (str, dataVariable) {
             dataVariable = dataVariable || 'data';
             return '"' + str.replace(/field:\((\w+)\)/g, (str.indexOf('condition:(') > -1 ? '' + dataVariable + '["$1"]' : '"+' + dataVariable + '["$1"]+"')).replace(/condition:(\(.*\))/g, '"+$1+"') + '"';
-
-        }, getField: function (str) {
-            return str.replace(/[\s\S]*field:\((\w+)\)[\s\S]*/, '$1')
-        }
-        , objReplace: function (str, dataVariable) {
-            dataVariable = dataVariable || 'data';
-            return str.replace(/field:\((\w+)\)/g, (dataVariable + '["$1"]').replace(/condition:(\(.*\))/g, '"+$1+"'));
 
         },
         fieldReplace: function (str, dataVariable) {
@@ -75,14 +67,6 @@
             }
             return unmatched;
         },
-        arrayValueInArray: function (array1, array2) {
-            for (var i = 0, length = array1.length; i < length; i++) {
-                if (array1[i] && $.inArray(array1[i], array2) !== -1) {
-                    return true;
-                }
-            }
-            return false;
-        },
         keyExists: function (array, obj) {
             array = this.toArray(array);
             var unmatched = [];
@@ -98,7 +82,7 @@
             var month = d.getMonth() + 1;
             var day = d.getDate();
             return d.getFullYear() + '-' + (('' + month).length < 2 ? '0' : '') + month + '-' +
-             (('' + day).length < 2 ? '0' : '') + day;
+                (('' + day).length < 2 ? '0' : '') + day;
         },
         urlUnion: function (url1, url2) {
             var lastIndex = url1.length - 1;
@@ -143,20 +127,14 @@
 
                 }
             }
-        }, findByKey: function (array, key, value) {
+        },
+        findByKey: function (array, key, value) {
             for (var i = 0, length = array.length; i < length; i++) {
                 if (array[i][key] == value) {
                     return array[i];
                 }
             }
             return false;
-        },
-        editUrl: function (url, path, toRemove) {
-            if (path === '')return url.replace(toRemove, '');
-            if (url.indexOf(path) < 0) {
-                url = this.urlUnion(path, url);
-            }
-            return url
         },
         removeMirrorValues: function (array) {
             var mirrors;
@@ -181,8 +159,8 @@
         loadImage: function (element, image, callback) {
             element = element || $();
             var ssi = this.ssi;
-            if (!image || image == 'undefined'){
-                element.parents('.ssi-itemWrapper').addClass('ssi-empty')
+            if (!image || image == 'undefined') {
+                element.parents('.ssi-itemWrapper').addClass('ssi-empty');
                 return;
             }
             if (!Ss_input.tools.cachedImage(image)) {
@@ -232,8 +210,7 @@
         sanitizeInput: function (str) {
             str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
             return str.trim();
-        }
-        ,
+        },
         removeFromArray: function (array, value) {
             value = this.toArray(value);
             for (var y = 0, vLength = value.length; y < vLength; y++) {
@@ -243,75 +220,49 @@
                     }
                 }
             }
-        }
-        ,
+        },
         removeByKey: function (array, key) {
             key = this.toArray(key);
             for (var i = 0; i < key.length; i++) {
                 delete array[key[i]];
             }
-        }
-        ,
+        },
         tooltip: function ($target, text, returnOnly) {
             $target = $($target);
             text = text || $target.data('title');
             if (!text)text = $target.attr('title');
             if (!text)return;
             var $toolTip = $('<div class="ssi-fadeOut ssi-fade ssi-tooltipText">'
-             + text +
-             '</div>').insertBefore($target);
+                + text +
+                '</div>').insertBefore($target);
             $target.one('mouseleave', function () {
                 $toolTip.remove();
             });
             if (returnOnly)return $toolTip;
             $toolTip.css({top: $target.position().top - $toolTip.height() - 12, left: $target.position().left})
-             .removeClass('ssi-fadeOut');
+                .removeClass('ssi-fadeOut');
 
             return $toolTip;
+        },
+        isFile: function (str, array) {
+            if (array)
+                return array.indexOf(str.split('/').pop().split('.').pop()) > -1;
+            return str
+                    .split('/').pop()
+                    .split('.').length > 1;
+        },
+        replaceText: function (text) {
+            var args = Array.apply(null, arguments);
+            for (var i = 1; i < args.length; i++) {
+                text = text.replace('$' + (i), args[i])
+            }
+            return text;
         }
-        ,
-        getDataUri: function (url, callback) {//@author https://davidwalsh.name/convert-image-data-uri-javascript
-            var image = new Image();
-            image.setAttribute('crossOrigin', 'anonymous');
-            image.onload = function () {
-                var canvas = document.createElement('canvas');
-                canvas.width = this.naturalWidth;
-                canvas.height = this.naturalHeight;
-                canvas.getContext('2d').drawImage(this, 0, 0);
-                callback(canvas.toDataURL('image/png'));
-            };
-            image.src = url;
-        }
-    }
-    ;
-
-    String.prototype.isFile = function (array) {
-        if (array)
-            return array.indexOf(this.split('/').pop().split('.').pop()) > -1;
-        return this
-          .split('/').pop()
-          .split('.').length > 1;
-    };
-    String.prototype.fixUrl = function () {
-        var length = this.length;
-        var url = this;
-        if (url[length - 1] !== '/') {
-            url += '/'
-        }
-        return url
-    };
-    String.prototype.replaceText = function () {
-        var args = Array.apply(null, arguments);
-        var text = this;
-        for (var i = 0; i < args.length; i++) {
-            text = text.replace('$' + (i + 1), args[i])
-        }
-        return text;
     };
 
     $('body').on('mouseenter', '.ssi-tooltip', function (e) { //----------------------------tooltip----------------------------------------------
-         Ss_input.tools.tooltip(e.currentTarget);
-     }
+            Ss_input.tools.tooltip(e.currentTarget);
+        }
     ).on('mouseover', 'div.ssi-dropDownWrapper .parent', function (e) {//----------------------------dropDownMenu----------------------------------------------
         $(e.currentTarget).children('ul').addClass('ssi-show');
         $(e.currentTarget).closest('ul').css('overflow', 'visible')
