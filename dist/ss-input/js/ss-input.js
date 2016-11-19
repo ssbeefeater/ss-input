@@ -439,6 +439,10 @@
         $(window).bind('beforeunload', function () {
             thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi').off('.ssi');
         });
+        $(window).on('resize.'+thisS.uniqueId, Ss_input.tools.debounce(function(){
+            setHeight('',thisS);
+            console.log(11);
+        }, 500));
 
         thisS.$content.on({
             'mouseenter.ssi': function (e) {
@@ -458,6 +462,7 @@
             thisS.initializedButtons = [];
             thisS.readOnlyMode = '';
             $(this).off('.ssi');
+            $(window).off('.'+thisS.uniqueId);
             $('body').off('.ssi');
         });
         thisS.$content.on('click', function (e) {
@@ -552,7 +557,9 @@
     }
 
     function setHeight(offset, thisS) {
-        offset = offset || (thisS.$content.hasClass('ssi-multiPickMode') && thisS.options.showTo != 'modalWindow' ? 115 : 70);
+        var extraOffset = thisS.$content.find('#ssi-menuButtons').height() - 44;
+        offset = extraOffset + (offset || (thisS.$content.hasClass('ssi-multiPickMode') && thisS.options.showTo != 'modalWindow' ? 115 : 70));
+
         var height = parseInt(thisS.$content.parent().height()) - offset;
         thisS.$content.find('#ssi-mainContent').css('height', height);
     }
@@ -1214,6 +1221,20 @@ Ss_input.locale = {
             dataVariable = dataVariable || 'data';
             return str.replace(/field:\((\w+)\)/g, dataVariable + '["$1"]');
 
+        },
+        debounce:function (func, wait, immediate) {//@author https://davidwalsh.name/javascript-debounce-function
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
         },
         arrayValuesInArray: function (valueArray, array) {
             valueArray = this.toArray(valueArray);

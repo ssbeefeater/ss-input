@@ -1,5 +1,5 @@
 /* inject:scss */
-.clearfix:after, .ssi-formWindow .ssi-topButtonsWrapper:after, .ssi-mainModal .ssi-itemWrapper #ssi-editField:after, .ssi-selectionPreview.ssi-textHolder:after, .ssi-mainModal:after, .ssi-mainModal #ssi-content:after {
+.clearfix:after, .ssi-formWindow .ssi-topButtonsWrapper:after, .ssi-mainModal .ssi-itemWrapper #ssi-editField:after, .ssi-selectionPreview.ssi-textHolder:after, .ssi-mainModal:after, .ssi-mainModal .ssi-menuButtons:after, .ssi-mainModal #ssi-content:after {
   content: "";
   display: table;
   clear: both;

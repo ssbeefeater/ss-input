@@ -101,6 +101,10 @@
 //scrollbar end
 .ssi-mainModal {
   @extend .clearfix;
+  .ssi-menuButtons{
+    @extend .clearfix;
+
+  }
   .ssi-bottomButtons {
     position: relative;
     width: 100%;

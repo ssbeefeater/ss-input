@@ -56,6 +56,20 @@
             return str.replace(/field:\((\w+)\)/g, dataVariable + '["$1"]');
 
         },
+        debounce:function (func, wait, immediate) {//@author https://davidwalsh.name/javascript-debounce-function
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        },
         arrayValuesInArray: function (valueArray, array) {
             valueArray = this.toArray(valueArray);
 
