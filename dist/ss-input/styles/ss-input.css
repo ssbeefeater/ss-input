@@ -1504,10 +1504,6 @@ span.icon {
   background: transparent;
 }
 
-.ssi-mainModal {
-  min-width: 400px;
-}
-
 .ssi-mainModal .ssi-bottomButtons {
   position: relative;
   width: 100%;
