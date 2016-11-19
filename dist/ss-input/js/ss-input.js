@@ -441,8 +441,7 @@
         });
         $(window).on('resize.'+thisS.uniqueId, Ss_input.tools.debounce(function(){
             setHeight('',thisS);
-            console.log(11);
-        }, 500));
+        }, 200));
 
         thisS.$content.on({
             'mouseenter.ssi': function (e) {
