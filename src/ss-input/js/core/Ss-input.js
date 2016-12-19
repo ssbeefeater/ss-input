@@ -451,8 +451,8 @@
         $(window).bind('beforeunload', function () {
             thisS.$element.trigger('resetAction.ssi').trigger('closeAction.ssi').off('.ssi');
         });
-        $(window).on('resize.'+thisS.uniqueId, Ss_input.tools.debounce(function(){
-            setHeight('',thisS);
+        $(window).on('resize.' + thisS.uniqueId, Ss_input.tools.debounce(function () {
+            setHeight('', thisS);
         }, 200));
 
         thisS.$content.on({
@@ -473,7 +473,7 @@
             thisS.initializedButtons = [];
             thisS.readOnlyMode = '';
             $(this).off('.ssi');
-            $(window).off('.'+thisS.uniqueId);
+            $(window).off('.' + thisS.uniqueId);
             $('body').off('.ssi');
         });
         thisS.$content.on('click', function (e) {
@@ -573,6 +573,7 @@
     function setHeight(offset, thisS) {
         var extraOffset = thisS.$content.find('#ssi-menuButtons').height() - 44;
         offset = extraOffset + (offset || (thisS.$content.hasClass('ssi-multiPickMode') && thisS.options.showTo != 'modalWindow' ? 115 : 70));
+        if (thisS.$content.hasClass('ssi-multiPickMode'))offset+= 40;
 
         var height = parseInt(thisS.$content.parent().height()) - offset;
         thisS.$content.find('#ssi-mainContent').css('height', height);

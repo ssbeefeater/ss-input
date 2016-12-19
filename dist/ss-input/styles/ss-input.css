@@ -733,39 +733,6 @@ span.icon {
   float: left;
 }
 
-.ssi-mainModal .ssi-btnContainer {
-  z-index: 2;
-}
-
-.ssi-mainModal .ssi-btnContainer .ssi-moreInputs {
-  margin-left: 0;
-  padding: 7.5px 0;
-  border-radius: 0;
-}
-
-.ssi-mainModal .ssi-extraWrapper {
-  position: absolute;
-  left: 0;
-  z-index: 111;
-  top: 35px;
-  overflow: hidden;
-  max-height: 0;
-  width: 100px;
-  -webkit-transition: max-height 0.3s;
-  transition: max-height 0.3s;
-  background-color: white;
-}
-
-.ssi-mainModal .ssi-extraWrapper .ssi-extraInput {
-  margin-top: 2px;
-}
-
-.ssi-mainModal .ssi-extraWrapper.ssi-slide {
-  max-height: 500px;
-  -webkit-transition: max-height 1s;
-  transition: max-height 1s;
-}
-
 .ssi-mainModal .ssi-mActive:hover {
   border: 9px solid cornflowerblue;
 }
@@ -1144,6 +1111,39 @@ span.icon {
 .ssi-mainModal #ssi-itemsWrapper.ssi-details .ssi-itemWrapper.ssi-mImgL .ssi-displayDiv {
   width: 100px;
   height: 100px;
+}
+
+.ssi-mainModal .ssi-btnContainer {
+  z-index: 2;
+}
+
+.ssi-mainModal .ssi-btnContainer .ssi-moreInputs {
+  margin-left: 0;
+  padding: 7.5px 0;
+  border-radius: 0;
+}
+
+.ssi-mainModal .ssi-extraWrapper {
+  position: absolute;
+  left: 0;
+  z-index: 111;
+  top: 35px;
+  overflow: hidden;
+  max-height: 0;
+  width: 100px;
+  -webkit-transition: max-height 0.3s;
+  transition: max-height 0.3s;
+  background-color: white;
+}
+
+.ssi-mainModal .ssi-extraWrapper .ssi-extraInput {
+  margin-top: 2px;
+}
+
+.ssi-mainModal .ssi-extraWrapper.ssi-slide {
+  max-height: 500px;
+  -webkit-transition: max-height 1s;
+  transition: max-height 1s;
 }
 
 .ssi-mainModal #ssi-collectionTitle {

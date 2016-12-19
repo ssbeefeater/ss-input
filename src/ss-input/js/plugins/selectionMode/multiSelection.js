@@ -87,6 +87,7 @@
                     thisS.checkItem(thisS.selected);
                     thisS.checkedFilesCount = thisS.selected.length;
                 }
+                ssi.$content.addClass('ssi-multiPickMode');
                 ssi.$content.find('#ssi-menuButtons').after(Ss_input.tools.template(thisS.template.displayFiles, {
                     selected: (!!thisS.options.maxItems ? '<span id="ssi-displaySelectedFiles">' + thisS.selectedFilesCount + '</span>/' + thisS.options.maxItems : '<span id="ssi-displaySelectedFiles">' + thisS.selectedFilesCount + '</span>'),
                     checked: thisS.checkedFilesCount,
